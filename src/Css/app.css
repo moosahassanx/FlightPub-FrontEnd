@@ -1,0 +1,74 @@
+.page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    
+}
+
+.content-wrapper {
+  flex: 1;
+}
+
+.recomend {
+  position: sticky;
+  bottom: 5px;
+}
+
+/* USED THIS FOR DIV PLACEMENT TESTING - might need in the future later..
+.login-redirect-wrapper
+{
+    
+    background-color: red;
+    
+}
+*/
+
+.login-wrapper-left
+{
+    float: left;
+    width: auto;
+}
+
+.login-wrapper-right
+{
+    float: right;
+    width: 100px;
+}
+
+.login-label
+{
+    color: rgb(173, 173, 173);
+}
+
+.form-button
+{
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 2px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 1px 1px;
+    cursor: pointer;
+    width: 110px;
+}
+
+.form-button:hover
+{
+    background-color: #316932;
+    transition: 0.3s;
+}
+
+.nav-text
+{
+    color: rgb(204, 204, 204);
+    font-weight: 100;
+}
+
+.form-input
+{
+    height: 30px;
+    padding:10px;
+}

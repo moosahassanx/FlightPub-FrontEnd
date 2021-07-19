@@ -1,0 +1,132 @@
+.discovery-div
+{
+    margin: auto;
+    width: 80%;
+    padding: 30px;
+    text-align: center;
+    /*border: 1px solid black;*/
+}
+
+.discovery-table
+{
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    /*border: 1px solid black;*/
+}
+
+.discovery-button
+{
+    width: 200px;
+    height: 50px;
+    margin: 10px;
+    font-size: large;
+    font-variant: small-caps;
+    background-color: lightskyblue;
+    border: none;
+}
+
+#beach
+{ background-image: url( '../Images/Discovery/Locations/beach.jpg' ); }
+#alps
+{ background-image: url( '../Images/Discovery/Locations/alps.jpg' ); }
+#rainforest
+{ background-image: url( '../Images/Discovery/Locations/rainforest.jpg' ); }
+#city
+{ background-image: url( '../Images/Discovery/Locations/city.jpg' ); }
+#safari
+{ background-image: url( '../Images/Discovery/Locations/safari.jpg' ); }
+#museum
+{ background-image: url( '../Images/Discovery/Events/museum.jpg' ); }
+#themePark
+{ background-image: url( '../Images/Discovery/Events/themepark.jpg' ); }
+#musicFestival
+{ background-image: url( '../Images/Discovery/Events/musicfestival.jpg' ); }
+#concert
+{ background-image: url( '../Images/Discovery/Events/concert.jpg' ); }
+#wine
+{ background-image: url( '../Images/Discovery/Events/wine.jpg' ); }
+#scuba
+{ background-image: url( '../Images/Discovery/Events/scuba.jpg' ); }
+#resort
+{ background-image: url( '../Images/Discovery/Events/resort.jpg' ); }
+#balloons
+{ background-image: url( '../Images/Discovery/Events/balloons.jpg' ); }
+#restaurant
+{ background-image: url( '../Images/Discovery/Events/restaurant.jpg' ); }
+#skiing
+{ background-image: url( '../Images/Discovery/Events/skiing.jpg' ); }
+#hiking
+{ background-image: url( '../Images/Discovery/Events/hiking.jpg' ); }
+#asian
+{ background-image: url( '../Images/Discovery/Events/asian.jpg' ); }
+#architecture
+{ background-image: url( '../Images/Discovery/Events/architecture.jpg' ); }
+#surfing
+{ background-image: url( '../Images/Discovery/Events/surfing.jpg' ); }
+#fashion
+{ background-image: url( '../Images/Discovery/Events/fashion.jpg' ); }
+
+
+/* The switch - the box around the slider */
+.discovery-switch
+{
+    position: relative;
+    display: inline-block;
+    background-size: 100%;
+    width: 300px;
+    height: 300px;
+    margin: 10px;
+}
+
+/* Hide default HTML checkbox */
+.discovery-switch input
+{
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slider */
+.discovery-slider
+{
+    background-color: white;
+    opacity: 0;
+
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+
+.discovery-slider:before
+{
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 196px;
+    left: 4px;
+    bottom: 4px;
+
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+
+input:checked + .discovery-slider
+{
+    opacity: 0.8;
+}
+
+input:checked + .discovery-slider:before
+{
+    -webkit-transform: translateX(196px);
+    -ms-transform: translateX(196px);
+    transform: translateX(196px);
+}

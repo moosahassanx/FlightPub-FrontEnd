@@ -1,0 +1,300 @@
+// imports
+import {useState, useEffect} from 'react'
+import '../Css/AccountManagement.css'
+import * as Icon from 'react-bootstrap-icons';
+
+const AccountManagement = () => {
+
+    // Grab user name from database based on the 
+    // redux store saved username
+    // const[userDetails, setUserDetails] = useState(getDetails);
+
+    // async function getDetails() {
+
+    //     var userDetailsNewstate = [];
+    //     var userName = ''
+
+    //     await fetch('http://localhost:8080/getDetails' + userName)
+    //                 .then(res => res.json())
+    //                 .then(json => json.array.forEach(element => {
+    //                     userDetailsNewstate.push(element)
+    //                 }))
+    //                 .then(setUserDetails(userDetailsNewstate))
+    // }
+
+    // local storage (refreshing the page wont make you lose login state data)
+    const loginNameData = localStorage.getItem('user-login-name');
+    const loginLastNameData = localStorage.getItem('user-login-last-name');
+    const loginEmailData = localStorage.getItem('user-login-email');
+    const loginPasswordData = localStorage.getItem('user-login-password');
+
+    // use states
+    const [openMyDetails, setMyDetails] = useState(false);
+    const [openChangePassword, setChangePassword] = useState(false);
+    const [openViewBookings, setViewBookings] = useState(true);
+    const [userDetails, setUserDetails] = useState([]);
+
+    // button functions for controlling boolean states
+    function controlMyDetails()
+    {
+        getUserDetails();
+
+        if(openMyDetails == false)
+        {
+            setMyDetails(true)
+        }
+        if(openChangePassword == true)
+        {
+            setChangePassword(false)
+        }
+        if(openViewBookings == true)
+        {
+            setViewBookings(false)
+        }
+    }
+    function controlChangePassword()
+    {
+        if(openMyDetails == true)
+        {
+            setMyDetails(false)
+        }
+        if(openChangePassword == false)
+        {
+            setChangePassword(true)
+        }
+        if(openViewBookings == true)
+        {
+            setViewBookings(false)
+        }
+    }
+    function controlViewBookings()
+    {
+        if(openMyDetails == true)
+        {
+            setMyDetails(false)
+        }
+        if(openChangePassword == true)
+        {
+            setChangePassword(false)
+        }
+        if(openViewBookings == false)
+        {
+            setViewBookings(true)
+        }        
+    }
+
+    // Async API call to fetch the users in the db
+    async function getUserDetails() {
+        let miniDetails = [];
+
+        // retrieving list of users from backend
+        await fetch('http://localhost:8080/users')
+        .then(response => response.json())
+        .then(json => json.forEach(element => {
+            var usernameComparer = "\"" + element.userName + "\"";
+
+            // verifying previous login token
+            if(usernameComparer == loginEmailData)
+            {
+                miniDetails.push(element.id);
+                miniDetails.push(element.userName);
+                miniDetails.push(element.firstName);
+                miniDetails.push(element.lastName);
+                miniDetails.push(element.phoneNumber);
+                miniDetails.push(element.address);
+                miniDetails.push(element.passwordHash);
+            }
+
+        }))
+
+        setUserDetails(miniDetails);
+
+        return miniDetails;
+    }
+
+    // changing password
+    function changingPassword()
+    {
+        // old password and the password that the user inputted dont match
+        var inputPassword = "\"" + document.getElementById("old-password").value + "\"";
+        if(inputPassword != loginPasswordData)
+        {
+            alert('Incorrect old password.');
+        }
+
+        // new password and the password that the user inputted dont match
+        else if(document.getElementById("new-password").value != document.getElementById("confirm-password").value)
+        {
+            alert('New password and confirm password don\'t match.');
+        }
+
+        // old password and new password are the same
+        else if(document.getElementById("old-password").value == document.getElementById("new-password").value)
+        {
+            alert('Old password and new password cannot be the same.');
+        }
+
+        // no errors, display success message
+        else
+        {
+            injectPassword();
+            alert('Password successfully changed.');
+        }
+    }
+
+    // injecting new password into db
+    async function injectPassword()
+    {
+        // creating json file to be fed into parameter
+        const loginCredentials = [{
+            userName: document.getElementById("username").value,
+            password: document.getElementById("new-password").value
+        }]
+
+        // retrieving list of users from backend
+        await fetch('http://localhost:8080/changePassword', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: loginCredentials
+        }).then(response => {
+            if(response.ok)
+            {
+                alert("BACKEND ERROR");
+            }
+            else
+            {
+                this.setState({successMessage: "Password successfully changed."});
+            }
+        })
+    }
+
+    return (
+        <div className="container-fluid text-center">
+            <h1>Account Management Section</h1>
+
+            <div id="accountmng-row" className="row">
+
+                {/* Displaying buttons to control right div page loading */}
+                <div id="accountmng-col"className="col-md-3">
+                    <div className='left-panel-header'>
+                    <h3>Side Panel</h3>
+                    </div>
+
+                    {/* All buttons to control right div */}
+                    <div className="btn-group-vertical">
+                        <button className='controller-button' onClick={controlViewBookings} id='viewBookings' value='viewBookings'><Icon.JournalBookmarkFill/> <span className='icon-spacer'>View Bookings</span></button>
+                        <button className='controller-button' onClick={controlMyDetails} id='myDetails' value='myDetails'><Icon.PersonCircle /> <span className='icon-spacer'>My Details</span></button>
+                        <button className='controller-button' onClick={controlChangePassword} id='changePassword' value='changePassword'><Icon.KeyFill/> <span className='icon-spacer'>Change Password</span></button>
+                    </div>
+                </div>
+
+                {/* display depending on user selection */}
+                <div id="accountmng-content-col" className="col-md-9">
+                    {
+                        // user clicked on My Details button
+                        openMyDetails === true ? (
+                            <div>
+                                <div className='right-panel-header'>
+                                    <h3>Account Details</h3>
+                                </div>
+
+                                {/* setting LHS for details */}
+                                <div className='account-detail-parent'>
+                                    <div className='account-detail-left'>
+                                        <p>ID: </p>
+                                        <p>E-mail: </p>
+                                        <p>First name: </p>
+                                        <p>Last name: </p>
+                                        <p>Phone: </p>
+                                        <p>Address: </p>
+                                        <p>Password: </p>
+                                    </div>
+
+                                    {/* iterate through everything in userDetails array and render on new line */}
+                                    <div className='account-detail-right'>
+                                        {userDetails.map((reptile) => (
+                                            <p>{reptile}</p>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>                            
+                        ) : null
+                    }
+                    {
+                        // user clicked on Change Password button
+                        openChangePassword === true ? (
+                            <div>
+                                <div className='right-panel-header'>
+                                    <h3>Change Password</h3>
+                                </div>
+
+                                <form>
+                                    <div className='account-detail-parent'>
+                                        {/* labels */}
+                                        <div className='account-detail-left'>
+                                            <label className='labeller' >Old password: </label> <br></br>
+                                            <label className='labeller'>New password: </label> <br></br>
+                                            <label className='labeller'>Confirm new password: </label>
+                                        </div>
+
+                                        {/* input text fields */}
+                                        <div className='account-detail-right'>
+                                            <input className='inputter' id='old-password' type='password'></input> <br></br>                                    
+                                            <input className='inputter' id='new-password' type='password'></input> <br></br>
+                                            <input className='inputter' id='confirm-password' type='password'></input>
+                                        </div>                                        
+                                    </div>   
+
+                                    {/* divs were off in height by 1 pixel otherwise css places button on {float: right;} */}
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <div className='button-placement'>
+                                        <input className='btn-changePassword' onClick={changingPassword} type='submit' value='Change password'></input>
+                                    </div>                                
+                                </form>
+                            </div>  
+                        ) : null
+                    }   
+                    {
+                        // user clicked on View Bookings button
+                        openViewBookings === true ? (
+                            <div>
+                                <div className='right-panel-header'>
+                                  <h3>My Bookings</h3>
+                                </div>
+
+                                <div className='account-detail-parent'>
+                                    {/* setting LHS for details */}
+                                    <div className='account-detail-left'>
+                                        <p>Flight number: </p>
+                                        <p>Departure: </p>
+                                        <p>Arrival: </p>
+                                    </div>
+
+                                    {/* retrieving and rendering details */}
+                                    <div className='account-detail-right'>
+                                        <p>PLACEHOLDER TEXT </p>
+                                        <p>PLACEHOLDER TEXT </p>
+                                        <p>PLACEHOLDER TEXT </p>
+                                    </div>
+                                </div>
+                            </div>
+                        ) : null
+                    }
+                </div>
+            </div>
+        </div>
+
+    )
+}
+
+export default AccountManagement;

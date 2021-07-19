@@ -1,0 +1,32 @@
+
+#email-row-form {
+
+    margin-top: 20px;
+
+
+}
+
+#map-col {
+
+    height: 600px;
+    width: 500px;
+
+}
+
+#main-container-groups {
+
+    max-width: 80%;
+    
+
+}
+
+#button-row-form {
+    padding-top: 10px;
+}
+
+#list-group {
+    overflow-y: auto;
+    max-height: 400px;
+}
+
+

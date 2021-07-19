@@ -1,0 +1,19 @@
+.carousel {
+  position: sticky;
+  bottom: 0;
+}
+
+.Slide {
+  /* text-align: center; */
+  background-color: #343a40;
+  color: #9a9da0;
+  border: 5px solid orange;
+  margin: 1%;
+}
+
+.photo {
+  position: relative;
+  left: 1px;
+  height: 100px;
+  width: 100px;
+}
