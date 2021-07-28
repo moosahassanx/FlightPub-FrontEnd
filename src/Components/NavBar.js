@@ -59,7 +59,8 @@ const NavBar = () => {
 
     // Async API call to fetch the users in the db
     async function loginChecker() {
-        // unused but the proper convention would be to use /login - coding complications resorted to simpler solutions
+        
+        // TODO: this might be used later - if not, remove this in the final version
         const loginCredentials = [{
             userName: document.getElementById("username").value,
             password: document.getElementById("password").value
@@ -67,25 +68,53 @@ const NavBar = () => {
 
         var loginSuccessful = false;
 
-        // retrieving list of users from backend
-        await fetch('http://localhost:8080/users')
-        .then(response => response.json())
-        .then(json => json.forEach(element => {
-            // compare input credentials with element of backend pulling
-            if(element.userName == document.getElementById("username").value && element.passwordHash == document.getElementById("password").value)
-            {
-                // set status
-                loginSuccessful= true;
+        // GET request using fetch with error handling
+        await fetch('http://localhost:8080/login', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userName: document.getElementById("username").value,
+                password: document.getElementById("password").value
+            })
+        })
+        .then(async response => {
+            const data = await response.json();
 
-                // local storage setting
-                setLoggerName(element.firstName)
-                setLoggerLastName(element.lastName)
-                setLoggerEmail(element.userName)
-                setLoggerPassword(element.passwordHash)
+            // check for error response
+            if (!response.ok) {
+                // get error message from body or default to response statusText
+                const error = (data && data.message) || response.statusText;
+                return Promise.reject(error);
             }
 
-        }))
+            console.log("LOGIN SUCCESSFUL!!")
+            console.log(data.map((object => object)))
+            console.log("WELCOME " + data.map((object => object.userName)))
 
+            // set status
+            loginSuccessful= true;
+
+            // local storage setting
+            var returnerFirstName = data.map(object => object.userName)
+            var returnerLastName = data.map(object => object.lastName)
+            var returnerUserName = data.map(object => object.userName)
+            var returnerPasswordHash = data.map(object => object.passwordHash)
+
+            setLoggerName(returnerFirstName)
+            setLoggerLastName(returnerLastName)
+            setLoggerEmail(returnerUserName)
+            setLoggerPassword(returnerPasswordHash)
+
+        })
+
+        // react catch
+        .catch(error => {
+            console.error('LOGIN ERROR: ', error.toString());
+        });
+        
         // decision based on successful credentials
         if(loginSuccessful == true)
         {
@@ -95,6 +124,8 @@ const NavBar = () => {
             dispatch(login());
             dispatch(username());
         }
+
+        // the fault is of the user - display error message
         else
         {
             alert('Incorrect username or password.');
