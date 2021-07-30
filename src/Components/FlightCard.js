@@ -32,18 +32,6 @@ const FlightCard = (props) => {
         return time;
     }
 
-    //retrieves the lowest price for every found flight to display to the user
-    function getPrice(num, date){
-        var url = `http://localhost:8080/getlowprice?fNum=${num}&date=${date}`;
-        console.log(url);
-         fetch(url)
-            .then(response => response.json())
-            .then(data =>{ 
-                console.log('data is' + data);
-                setPrice(data);
-            })
-    }
-
     //this will map the flightData object array into cards and display the needed information for each flight found
     const renderFlight = (data) =>{
         var flightData = data;
@@ -60,8 +48,8 @@ const FlightCard = (props) => {
                         Date: {formatDate(item.departureTime)}&emsp;&emsp;&emsp;Duration: {timeConvert(item.duration + item.durationSecondLeg)}<br/>    
                         Departs At {getTime(item.departureTime)}&emsp;&emsp;&emsp;Arrives At {getTime(item.arrivalTime)} <br/>
                         Plane type: {item.planeType.details} <br/>
-                        {/* {getPrice(item.flightNumber, item.departureTime)} */}
-                        Price: ${item.duration + item.durationSecondLeg}
+                        {console.log(item.price)}
+                        Price: ${item.price}
                       </Card.Text>
                       <Button variant="primary">Book Flight</Button>
                     </Card.Body>
@@ -82,7 +70,7 @@ const FlightCard = (props) => {
     //and render the results based on that to prevent errors
     const renderContent = () => {
         console.log(flight.length + tripType);
-        console.log(flight);
+        // console.log(flight[0].price);
         console.log(returnFlight);
         if(flight.length == 0 && tripType == 'One-Way')
         {

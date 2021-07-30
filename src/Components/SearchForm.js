@@ -23,9 +23,10 @@ const SearchForm = () => {
     const minDate = new Date();
     //this sets the data variables to null everytime the component mounts to prevent old searches from presisting
     useEffect(() => {
-        setFlightData([]);
-        setReturnFlights([]);
-    }, [])
+        // setFlightData([]);
+        // setReturnFlights([]);
+        
+    }, [flightData, returnFlights])
     //this variable is used to set the maximum date for a search to be 1 year in the future
     let in1Years = new Date();
     in1Years.setFullYear(in1Years.getFullYear() + 1);
@@ -45,6 +46,29 @@ const SearchForm = () => {
     const handleArrDate = (date) =>{
         setArrDate(date);
     }
+
+    async function getPrice(num, date){
+        var url = `http://localhost:8080/getlowprice?fNum=${num}&date=${date}`;
+        return await fetch(url)
+            .then(response => response.json())
+           
+    }
+
+    async function loadPrice(data, num) {
+        data.map((item)=>{
+            getPrice(item.flightNumber, item.departureTime).then(d => {
+                item.price = d
+                if(num == 1)
+                {
+                    setFlightData(data)
+                }
+                else{
+                    setReturnFlights(data)
+                }
+            })
+        })
+        setSearch(true);
+    }
     //Assyncronised function to fetch flight data from the backend depending on the type of trip
     //it uses the passed urls to make a HTTP request to the back-end, urlOne is for one-way trips and urlRe is for return
     //once the data is fetched, the returnFlights and flightData variables are set to the JSON object array
@@ -54,16 +78,14 @@ const SearchForm = () => {
             await fetch(urlRe)
             .then(response => response.json())
             .then(data =>{ 
-              setReturnFlights(data);
-            })
-            // alert('Return form submitted');
+              loadPrice(data, 2)
+            })       
         }
         await fetch(urlOne)
         .then(response => response.json())
         .then(data =>{ 
-          setFlightData(data);
+          loadPrice(data, 1);
         })
-        // console.log(flightData[0].departureCode.destinationCode);
     }   
     //on submit the form is validated to ensure that the api call is done correctly and to prevent server side errors
     //then the Parameters are added to the urls and sent to the getFlightData function
@@ -97,7 +119,9 @@ const SearchForm = () => {
             urlRe += `getflights?from=${destTo}&to=${destFrom}&dep=${arrDate.toISOString()}`;
             getFlightData(url , urlRe);
         }
-        setSearch(true);
+        
+        setFlightData([])
+        setReturnFlights([])
         event.preventDefault();
     }
     //conditional rendering where only the required fields are shown depending on the trip type selected.
@@ -162,7 +186,7 @@ const SearchForm = () => {
                         <DatePicker 
                         selected={departureDate}
                         minDate={minDate}
-                        maxDate={in1Years}
+                        maxDate={arrDate}
                         onChange={handleDepDate}
                         />
                     </div>
@@ -222,7 +246,7 @@ const SearchForm = () => {
                             <DatePicker 
                             selected={departureDate}
                             minDate={minDate}
-                            maxDate={in1Years}
+                            maxDate={arrDate}
                             onChange={handleDepDate}
                             />
                         </div>
