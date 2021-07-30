@@ -59,6 +59,7 @@ const NavBar = () => {
 
     // Async API call to fetch the users in the db
     async function loginChecker() {
+        // TODO: have users login with secure encryption..
         
         // TODO: this might be used later - if not, remove this in the final version
         const loginCredentials = [{
