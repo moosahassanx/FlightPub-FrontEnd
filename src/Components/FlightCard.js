@@ -9,7 +9,6 @@ const FlightCard = (props) => {
     const flight = props.oneWayData;
     const returnFlight = props.returnData;
     const tripType = props.trip;
-    const [price, setPrice] = useState();
     //converts the duration of the flight from minutes to hours and minutes
     function timeConvert(n) {
         var num = n;
@@ -121,7 +120,7 @@ const FlightCard = (props) => {
                     <>
                         <h2>Flights to {flight[0].destinationCode.airport}</h2>
                         {renderFlight(flight)}
-                        <h2>return flights to {returnFlight[0].destinationCode.airport}</h2>
+                        <h2>Return flights to {returnFlight[0].destinationCode.airport}</h2>
                         {renderFlight(returnFlight)}
                     </>
                 ]

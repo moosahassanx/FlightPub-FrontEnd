@@ -46,16 +46,17 @@ const SearchForm = () => {
     const handleArrDate = (date) =>{
         setArrDate(date);
     }
-
+    
     async function getPrice(num, date){
-        var url = `http://localhost:8080/getlowprice?fNum=${num}&date=${date}`;
+        let d = new Date(date)
+        var url = `http://localhost:8080/getlowprice?fNum=${num}&date=${d.toISOString()}`;
         return await fetch(url)
             .then(response => response.json())
            
     }
 
     async function loadPrice(data, num) {
-        data.map((item)=>{
+       await data.map((item)=>{
             getPrice(item.flightNumber, item.departureTime).then(d => {
                 item.price = d
                 if(num == 1)
