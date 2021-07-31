@@ -54,20 +54,15 @@ const SearchForm = () => {
     const handleArrDate = (date) =>{
         setArrDate(date);
     }
-<<<<<<< Updated upstream
     
-=======
     const handleNumberOfTrevlers = (event) =>{
         setnumberOfTrevlers(event.target.value);
     }
 
->>>>>>> Stashed changes
     async function getPrice(num, date){
         let d = new Date(date)
         var url = `http://localhost:8080/getlowprice?fNum=${num}&date=${d.toISOString()}`;
         return await fetch(url)
-            .then(response => response.json())
-           
             .then(response => response.json())      
     }
 
@@ -96,31 +91,8 @@ const SearchForm = () => {
         setSearch(true);
     }
 
-<<<<<<< Updated upstream
-    async function loadPrice(data, num) {
-       await data.map((item)=>{
-=======
-    // async function loadPrice(data, num) {
-    //     data.map((item)=>{
-    //         getPrice(item.flightNumber, item.departureTime).then(d => {
-    //             item.price = d
-    //             if(num == 1)
-    //             {
-    //                 setFlightData(data)
-    //                 setFlightNumber(item.flightNumber)
-    //             }
-    //             else{
-    //                 setReturnFlights(data)
-    //                 setReturnFlightNumber(item.flightNumber)
-    //             }
-    //         })
-    //     })
-    //     setSearch(true);
-    // }
-
         async function loadPrice(data, num) {
         data.map((item)=>{
->>>>>>> Stashed changes
             getPrice(item.flightNumber, item.departureTime).then(d => {
                 item.price = d
                 if(num == 1)
