@@ -12,6 +12,14 @@ const SearchForm = () => {
     //trip type is set to One-Way by default and the dates are set to the current date
     const[tripType, setTripType] = useState('One-Way');
     const[destFrom, setDestFrom] = useState();
+
+    const[numberOfTrevlers, setnumberOfTrevlers] = useState(1);
+    const[flightNumber, setFlightNumber] = useState();
+    const[returnFlightNumber, setReturnFlightNumber] = useState();
+    const [AvaFlightData, setAvaFlightData] = useState([]);
+    const [AvaReturnFlights, setAvaReturnFlights] = useState([]);
+    
+
     const[destTo, setDestTo] = useState();
     const [departureDate, setDepartureDate] = useState(new Date());
     const [arrDate, setArrDate] = useState(new Date());
@@ -46,25 +54,83 @@ const SearchForm = () => {
     const handleArrDate = (date) =>{
         setArrDate(date);
     }
+<<<<<<< Updated upstream
     
+=======
+    const handleNumberOfTrevlers = (event) =>{
+        setnumberOfTrevlers(event.target.value);
+    }
+
+>>>>>>> Stashed changes
     async function getPrice(num, date){
         let d = new Date(date)
         var url = `http://localhost:8080/getlowprice?fNum=${num}&date=${d.toISOString()}`;
         return await fetch(url)
             .then(response => response.json())
            
+            .then(response => response.json())      
     }
 
-    async function loadPrice(data, num) {
-       await data.map((item)=>{
+    async function getFlightAvailblity(depDate, nflightNumber, NumberOfTrevlers){
+        var url = `http://localhost:8080/getAvailability?depTime=${depDate}&flightNum=${nflightNumber}&depSeats=${NumberOfTrevlers}`;
+        return await fetch(url)
+           .then(response => response.json())   
+     }
+
+
+     async function loadPrice(data, num) {
+        data.map((item)=>{
             getPrice(item.flightNumber, item.departureTime).then(d => {
                 item.price = d
                 if(num == 1)
                 {
                     setFlightData(data)
+                    setFlightNumber(item.flightNumber)
                 }
                 else{
                     setReturnFlights(data)
+                    setReturnFlightNumber(item.flightNumber)
+                }
+            })
+        })
+        setSearch(true);
+    }
+
+<<<<<<< Updated upstream
+    async function loadPrice(data, num) {
+       await data.map((item)=>{
+=======
+    // async function loadPrice(data, num) {
+    //     data.map((item)=>{
+    //         getPrice(item.flightNumber, item.departureTime).then(d => {
+    //             item.price = d
+    //             if(num == 1)
+    //             {
+    //                 setFlightData(data)
+    //                 setFlightNumber(item.flightNumber)
+    //             }
+    //             else{
+    //                 setReturnFlights(data)
+    //                 setReturnFlightNumber(item.flightNumber)
+    //             }
+    //         })
+    //     })
+    //     setSearch(true);
+    // }
+
+        async function loadPrice(data, num) {
+        data.map((item)=>{
+>>>>>>> Stashed changes
+            getPrice(item.flightNumber, item.departureTime).then(d => {
+                item.price = d
+                if(num == 1)
+                {
+                    setFlightData(data)
+                    setFlightNumber(item.flightNumber)
+                }
+                else{
+                    setReturnFlights(data)
+                    setReturnFlightNumber(item.flightNumber)
                 }
             })
         })
@@ -73,6 +139,8 @@ const SearchForm = () => {
     //Assyncronised function to fetch flight data from the backend depending on the type of trip
     //it uses the passed urls to make a HTTP request to the back-end, urlOne is for one-way trips and urlRe is for return
     //once the data is fetched, the returnFlights and flightData variables are set to the JSON object array
+
+
     async function getFlightData(urlOne, urlRe) {
         if(tripType === 'Return')
         {
@@ -87,7 +155,9 @@ const SearchForm = () => {
         .then(data =>{ 
           loadPrice(data, 1);
         })
-    }   
+    }
+    
+    
     //on submit the form is validated to ensure that the api call is done correctly and to prevent server side errors
     //then the Parameters are added to the urls and sent to the getFlightData function
     const handleSubmit = (event)=>{
@@ -113,12 +183,15 @@ const SearchForm = () => {
         {
             url += `getflights?from=${destFrom}&to=${destTo}&dep=${departureDate.toISOString()}`;
             getFlightData(url , urlRe);
+            getFlightAvailblity(departureDate, flightNumber, numberOfTrevlers, 1)
         }
         if(tripType === 'Return' && !error)
         {
             url += `getflights?from=${destFrom}&to=${destTo}&dep=${departureDate.toISOString()}`;
             urlRe += `getflights?from=${destTo}&to=${destFrom}&dep=${arrDate.toISOString()}`;
             getFlightData(url , urlRe);
+            getFlightAvailblity(departureDate, flightNumber, numberOfTrevlers, 2)
+
         }
         
         setFlightData([])
@@ -133,15 +206,32 @@ const SearchForm = () => {
         <>
             <div className="form">
                 {/* {console.log(tripType)} */}
+                
                 {tripType === 'One-Way'
                     ?<form onSubmit={handleSubmit} className="form-outline mb-2 text-center">  
                     <div>
                     <br/>
+                    Trip Type:
                         <select value={tripType} onChange={handleTripType}>
                             <option value="One-Way">One-Way</option>
                             <option value="Return">Return</option>
                         </select>
                     </div>
+                    <div className="dropdown">
+                    <br/>
+                    Number of trevlers:   
+                        <select value={numberOfTrevlers} onChange={handleNumberOfTrevlers}>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                        </select>
+                    </div><br/>
                     <div>
                         <p>Depature Destination</p>
                         <Dropdown
@@ -202,6 +292,21 @@ const SearchForm = () => {
                             <option value="Return">Return</option>
                         </select>
                         </div>
+                        <div>
+                    <br/>
+                    Number of trevlers<br/>
+                        <select value={numberOfTrevlers} onChange={handleNumberOfTrevlers}>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                        </select>
+                    </div><br/>
                         <div>
                         <p>Depature Destination</p>
                         <Dropdown
