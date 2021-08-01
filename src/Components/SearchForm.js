@@ -13,13 +13,8 @@ const SearchForm = () => {
     const[tripType, setTripType] = useState('One-Way');
     const[destFrom, setDestFrom] = useState();
 
-    const[numberOfTrevlers, setnumberOfTrevlers] = useState(1);
+    const[numberOfTravellers, setnumberOfTravellers] = useState(1);
     const[flightNumber, setFlightNumber] = useState();
-    const[returnFlightNumber, setReturnFlightNumber] = useState();
-    const [AvaFlightData, setAvaFlightData] = useState([]);
-    const [AvaReturnFlights, setAvaReturnFlights] = useState([]);
-    
-
     const[destTo, setDestTo] = useState();
     const [departureDate, setDepartureDate] = useState(new Date());
     const [arrDate, setArrDate] = useState(new Date());
@@ -29,15 +24,12 @@ const SearchForm = () => {
     const [search, setSearch] = useState(false);
     //minDate is the Minimum date for the dates selection which is the current date at the time of use in the system
     const minDate = new Date();
-    //this sets the data variables to null everytime the component mounts to prevent old searches from presisting
-    useEffect(() => {
-        // setFlightData([]);
-        // setReturnFlights([]);
-        
-    }, [flightData, returnFlights])
+    
     //this variable is used to set the maximum date for a search to be 1 year in the future
     let in1Years = new Date();
     in1Years.setFullYear(in1Years.getFullYear() + 1);
+
+    const[maxDates, setMaxDate] = useState(in1Years);
     //Parameter change handlers
     const handleTripType = (event) =>{
         setTripType(event.target.value);
@@ -53,10 +45,11 @@ const SearchForm = () => {
     }
     const handleArrDate = (date) =>{
         setArrDate(date);
+        setMaxDate(date);
     }
     
-    const handleNumberOfTrevlers = (event) =>{
-        setnumberOfTrevlers(event.target.value);
+    const handleNumberOfTravellers = (event) =>{
+        setnumberOfTravellers(event.target.value);
     }
 
     async function getPrice(num, date){
@@ -66,48 +59,52 @@ const SearchForm = () => {
             .then(response => response.json())      
     }
 
-    async function getFlightAvailblity(depDate, nflightNumber, NumberOfTrevlers){
-        var url = `http://localhost:8080/getAvailability?depTime=${depDate}&flightNum=${nflightNumber}&depSeats=${NumberOfTrevlers}`;
+    async function getFlightAvailblity(flight){
+        let d = new Date(flight.departureTime)
+        var url = `http://localhost:8080/getAvailability?depTime=${d.toISOString()}&flightNum=${flight.flightNumber}&depSeats=${numberOfTravellers}`;
+        console.log(url)
         return await fetch(url)
            .then(response => response.json())   
-     }
+    }
 
 
-     async function loadPrice(data, num) {
+    async function loadPrice(data, num) {
         data.map((item)=>{
             getPrice(item.flightNumber, item.departureTime).then(d => {
                 item.price = d
                 if(num == 1)
                 {
-                    setFlightData(data)
-                    setFlightNumber(item.flightNumber)
+                    getFlightAvailblity(item).then(available=>{ 
+                        console.log('There ');
+                        console.log(item.flightNumber);
+                        console.log(available.length);
+                        console.log(available);
+                        if(available.length > 0)
+                        {
+                            setFlightData(old =>[...old, item])
+                            // setFlightNumber(item.flightNumber)
+                        }
+                        })
                 }
                 else{
-                    setReturnFlights(data)
-                    setReturnFlightNumber(item.flightNumber)
+                    getFlightAvailblity(item).then(available=>{ 
+                        console.log('return')
+                        console.log(item.flightNumber);
+                        console.log(available.length);
+                        console.log(available);
+                        if(available.length > 0)
+                        {
+                            console.log('im in the if statement')
+                            setReturnFlights(old =>[...old, item])
+                            // setReturnFlightNumber(item.flightNumber)
+                        }
+                        })
                 }
             })
         })
         setSearch(true);
     }
 
-        async function loadPrice(data, num) {
-        data.map((item)=>{
-            getPrice(item.flightNumber, item.departureTime).then(d => {
-                item.price = d
-                if(num == 1)
-                {
-                    setFlightData(data)
-                    setFlightNumber(item.flightNumber)
-                }
-                else{
-                    setReturnFlights(data)
-                    setReturnFlightNumber(item.flightNumber)
-                }
-            })
-        })
-        setSearch(true);
-    }
     //Assyncronised function to fetch flight data from the backend depending on the type of trip
     //it uses the passed urls to make a HTTP request to the back-end, urlOne is for one-way trips and urlRe is for return
     //once the data is fetched, the returnFlights and flightData variables are set to the JSON object array
@@ -120,15 +117,16 @@ const SearchForm = () => {
             .then(response => response.json())
             .then(data =>{ 
               loadPrice(data, 2)
+            //   filterFlights(2);
             })       
         }
         await fetch(urlOne)
         .then(response => response.json())
         .then(data =>{ 
           loadPrice(data, 1);
+        //   filterFlights(1);
         })
     }
-    
     
     //on submit the form is validated to ensure that the api call is done correctly and to prevent server side errors
     //then the Parameters are added to the urls and sent to the getFlightData function
@@ -155,21 +153,23 @@ const SearchForm = () => {
         {
             url += `getflights?from=${destFrom}&to=${destTo}&dep=${departureDate.toISOString()}`;
             getFlightData(url , urlRe);
-            getFlightAvailblity(departureDate, flightNumber, numberOfTrevlers, 1)
         }
         if(tripType === 'Return' && !error)
         {
             url += `getflights?from=${destFrom}&to=${destTo}&dep=${departureDate.toISOString()}`;
             urlRe += `getflights?from=${destTo}&to=${destFrom}&dep=${arrDate.toISOString()}`;
             getFlightData(url , urlRe);
-            getFlightAvailblity(departureDate, flightNumber, numberOfTrevlers, 2)
-
         }
         
         setFlightData([])
         setReturnFlights([])
         event.preventDefault();
     }
+
+    //this sets the data variables to null everytime the component mounts to prevent old searches from presisting
+    useEffect(() => {
+        setMaxDate(in1Years);
+     }, [tripType])
     //conditional rendering where only the required fields are shown depending on the trip type selected.
     //two packages have been used to implement the dropdown search menu (semantics-ui) and the date pickers (react-datepicker).
     //once the form has been submitted and the data is fetched the FlightCard component rendered below will recieve the flight data-
@@ -191,8 +191,8 @@ const SearchForm = () => {
                     </div>
                     <div className="dropdown">
                     <br/>
-                    Number of trevlers:   
-                        <select value={numberOfTrevlers} onChange={handleNumberOfTrevlers}>
+                    Number of Travellers:   
+                        <select value={numberOfTravellers} onChange={handleNumberOfTravellers}>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -249,7 +249,8 @@ const SearchForm = () => {
                         <DatePicker 
                         selected={departureDate}
                         minDate={minDate}
-                        maxDate={arrDate}
+                        maxDate={maxDates}
+                        dateFormat="dd/MM/yyyy"
                         onChange={handleDepDate}
                         />
                     </div>
@@ -259,6 +260,7 @@ const SearchForm = () => {
                     :<form onSubmit={handleSubmit} className="form-outline mb-2 text-center">  
                         <div>
                         <br/>
+                        Trip Type:
                         <select value={tripType} onChange={handleTripType}>
                             <option value="One-Way">One-Way</option>
                             <option value="Return">Return</option>
@@ -266,8 +268,8 @@ const SearchForm = () => {
                         </div>
                         <div>
                     <br/>
-                    Number of trevlers<br/>
-                        <select value={numberOfTrevlers} onChange={handleNumberOfTrevlers}>
+                    Number of Travellers<br/>
+                        <select value={numberOfTravellers} onChange={handleNumberOfTravellers}>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -324,7 +326,8 @@ const SearchForm = () => {
                             <DatePicker 
                             selected={departureDate}
                             minDate={minDate}
-                            maxDate={arrDate}
+                            maxDate={maxDates}
+                            dateFormat="dd/MM/yyyy"
                             onChange={handleDepDate}
                             />
                         </div>
@@ -332,8 +335,9 @@ const SearchForm = () => {
                             <p>Returning</p>
                             <DatePicker 
                             selected={arrDate}
-                            minDate={minDate}
+                            minDate={departureDate}
                             maxDate={in1Years}
+                            dateFormat="dd/MM/yyyy"
                             onChange={handleArrDate}
                             />
                         </div>
