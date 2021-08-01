@@ -82,30 +82,70 @@ const AccountManagement = () => {
             setViewBookings(true)
         }        
     }
-
+    
     // Async API call to fetch the users in the db
     async function getUserDetails() {
         let miniDetails = [];
 
-        // retrieving list of users from backend
-        await fetch('http://localhost:8080/users')
-        .then(response => response.json())
-        .then(json => json.forEach(element => {
-            var usernameComparer = "\"" + element.userName + "\"";
+        var tempLoginUser1 = loginEmailData.substring(2)
+        var tempLoginPass1 = loginPasswordData.substring(2)
 
-            // verifying previous login token
-            if(usernameComparer == loginEmailData)
-            {
-                miniDetails.push(element.id);
-                miniDetails.push(element.userName);
-                miniDetails.push(element.firstName);
-                miniDetails.push(element.lastName);
-                miniDetails.push(element.phoneNumber);
-                miniDetails.push(element.address);
-                miniDetails.push(element.passwordHash);
+        var tempLoginUser1 = tempLoginUser1.slice(0, -2)
+        var tempLoginPass1 = tempLoginPass1.slice(0, -2)
+
+        console.log("loginEmailData: " + tempLoginUser1);
+        console.log("loginPasswordData: " + tempLoginPass1);
+
+        // ==== NEW CODE
+        // GET request using fetch with error handling
+        await fetch('http://localhost:8080/login', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userName: tempLoginUser1,
+                password: tempLoginPass1
+            })
+        })
+        .then(async response => {
+            const data = await response.json();
+
+            // check for error response
+            if (!response.ok) {
+                // get error message from body or default to response statusText
+                const error = (data && data.message) || response.statusText;
+                return Promise.reject(error);
             }
 
-        }))
+            console.log("LOGIN SUCCESSFUL!!")
+            console.log(data.map((object => object)))
+            console.log("WELCOME " + data.map((object => object.userName)))
+
+            // local storage setting
+            var returnerId = data.map(object => object.id)
+            var returnerUserName = data.map(object => object.userName)
+            var returnerFirstName = data.map(object => object.firstName)
+            var returnerLastName = data.map(object => object.lastName)
+            var returnerSalt = data.map(object => object.salt)
+            var returnerPasswordHash = data.map(object => object.passwordHash)
+            var returnerPhoneNumber = data.map(object => object.phoneNumber)
+            var returnerAddress = data.map(object => object.address)
+            var returnerLastLocation = data.map(object => object.lastLocation)
+            var returnerBookingList = data.map(object => object.lastLocation)
+
+            miniDetails.push(returnerUserName);
+            miniDetails.push(returnerFirstName);
+            miniDetails.push(returnerLastName);
+            miniDetails.push(returnerPhoneNumber);
+
+        })
+
+        // react catch
+        .catch(error => {
+            console.error('LOGIN ERROR: ', error.toString());
+        });
 
         setUserDetails(miniDetails);
 
