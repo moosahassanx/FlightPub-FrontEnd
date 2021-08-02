@@ -72,7 +72,6 @@ const FlightCard = (props) => {
                         Date: {formatDate(item.departureTime)}&emsp;&emsp;&emsp;Duration: {timeConvert(item.duration + item.durationSecondLeg)}<br/>    
                         Departs At {getTime(item.departureTime)}&emsp;&emsp;&emsp;Arrives At {getTime(item.arrivalTime)} <br/>
                         Plane type: {item.planeType.details} <br/>
-                        {/* {console.log(item.price)} */}
                         Price: ${item.price}
                       </Card.Text>
                       {createBookButton(isReturn, item)}
@@ -94,8 +93,7 @@ const FlightCard = (props) => {
     //and render the results based on that to prevent errors
     const renderContent = () => {
         console.log(flight.length + tripType);
-        // console.log(flight[0].price);
-        // console.log(returnFlight);
+
         if(flight.length == 0 && tripType == 'One-Way')
         {
             return[
