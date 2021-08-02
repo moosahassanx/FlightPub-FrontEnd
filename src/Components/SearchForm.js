@@ -14,7 +14,7 @@ const SearchForm = () => {
     const[destFrom, setDestFrom] = useState();
 
     const[numberOfTravellers, setnumberOfTravellers] = useState(1);
-    const[flightNumber, setFlightNumber] = useState();
+    const[tClass, setTclass] = useState('ECO');
     const[destTo, setDestTo] = useState();
     const [departureDate, setDepartureDate] = useState(new Date());
     const [arrDate, setArrDate] = useState(new Date());
@@ -41,6 +41,7 @@ const SearchForm = () => {
         setDestTo(data.value);
     }
     const handleDepDate = (date) =>{
+        console.log(date.toUTCString())
         setDepartureDate(date);
     }
     const handleArrDate = (date) =>{
@@ -51,17 +52,20 @@ const SearchForm = () => {
     const handleNumberOfTravellers = (event) =>{
         setnumberOfTravellers(event.target.value);
     }
+    const handleTicketClass = (event) =>{
+        setTclass(event.target.value);
+    }
 
     async function getPrice(num, date){
         let d = new Date(date)
-        var url = `http://localhost:8080/getlowprice?fNum=${num}&date=${d.toISOString()}`;
+        var url = `http://localhost:8080/getlowprice?fNum=${num}&date=${d.toJSON()}`;
         return await fetch(url)
             .then(response => response.json())      
     }
 
     async function getFlightAvailblity(flight){
         let d = new Date(flight.departureTime)
-        var url = `http://localhost:8080/getAvailability?depTime=${d.toISOString()}&flightNum=${flight.flightNumber}&depSeats=${numberOfTravellers}`;
+        var url = `http://localhost:8080/getAvailability?depTime=${d.toJSON()}&flightNum=${flight.flightNumber}&depSeats=${numberOfTravellers}&class=${tClass}`;
         console.log(url)
         return await fetch(url)
            .then(response => response.json())   
@@ -151,13 +155,14 @@ const SearchForm = () => {
         }
         if(tripType === 'One-Way' && !error)
         {
-            url += `getflights?from=${destFrom}&to=${destTo}&dep=${departureDate.toISOString()}`;
+            console.log(departureDate.toJSON())
+            url += `getflights?from=${destFrom}&to=${destTo}&dep=${departureDate.toJSON()}`;
             getFlightData(url , urlRe);
         }
         if(tripType === 'Return' && !error)
         {
-            url += `getflights?from=${destFrom}&to=${destTo}&dep=${departureDate.toISOString()}`;
-            urlRe += `getflights?from=${destTo}&to=${destFrom}&dep=${arrDate.toISOString()}`;
+            url += `getflights?from=${destFrom}&to=${destTo}&dep=${departureDate.toJSON()}`;
+            urlRe += `getflights?from=${destTo}&to=${destFrom}&dep=${arrDate.toJSON()}`;
             getFlightData(url , urlRe);
         }
         
@@ -183,7 +188,7 @@ const SearchForm = () => {
                     ?<form onSubmit={handleSubmit} className="form-outline mb-2 text-center">  
                     <div>
                     <br/>
-                    Trip Type:
+                    Trip Type:&emsp;
                         <select value={tripType} onChange={handleTripType}>
                             <option value="One-Way">One-Way</option>
                             <option value="Return">Return</option>
@@ -191,7 +196,7 @@ const SearchForm = () => {
                     </div>
                     <div className="dropdown">
                     <br/>
-                    Number of Travellers:   
+                    Number of Travellers:  &emsp; 
                         <select value={numberOfTravellers} onChange={handleNumberOfTravellers}>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -202,6 +207,14 @@ const SearchForm = () => {
                             <option value="7">7</option>
                             <option value="8">8</option>
                             <option value="9">9</option>
+                        </select>
+                        &emsp;
+                    Ticket Class: &emsp;
+                        <select value={tClass} onChange={handleTicketClass}>
+                            <option value='ECO'>Economy</option>
+                            <option value='PME'>Premium Economy</option>                            
+                            <option value='BUS'>Business Class</option>
+                            <option value='FIR'>First Class</option>
                         </select>
                     </div><br/>
                     <div>
@@ -260,7 +273,7 @@ const SearchForm = () => {
                     :<form onSubmit={handleSubmit} className="form-outline mb-2 text-center">  
                         <div>
                         <br/>
-                        Trip Type:
+                        Trip Type:&emsp;
                         <select value={tripType} onChange={handleTripType}>
                             <option value="One-Way">One-Way</option>
                             <option value="Return">Return</option>
@@ -268,7 +281,7 @@ const SearchForm = () => {
                         </div>
                         <div>
                     <br/>
-                    Number of Travellers<br/>
+                    Number of Travellers: &emsp;
                         <select value={numberOfTravellers} onChange={handleNumberOfTravellers}>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -279,6 +292,14 @@ const SearchForm = () => {
                             <option value="7">7</option>
                             <option value="8">8</option>
                             <option value="9">9</option>
+                        </select>
+                        &emsp;
+                    Ticket Class: &emsp;
+                        <select value={tClass} onChange={handleTicketClass}>
+                            <option value='ECO'>Economy</option>
+                            <option value='PME'>Premium Economy</option>                            
+                            <option value='BUS'>Business Class</option>
+                            <option value='FIR'>First Class</option>
                         </select>
                     </div><br/>
                         <div>
