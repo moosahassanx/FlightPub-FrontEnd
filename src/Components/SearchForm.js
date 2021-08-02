@@ -41,7 +41,6 @@ const SearchForm = () => {
         setDestTo(data.value);
     }
     const handleDepDate = (date) =>{
-        console.log(date.toUTCString())
         setDepartureDate(date);
     }
     const handleArrDate = (date) =>{
@@ -58,7 +57,7 @@ const SearchForm = () => {
 
     async function getPrice(num, date){
         let d = new Date(date)
-        var url = `http://localhost:8080/getlowprice?fNum=${num}&date=${d.toJSON()}`;
+        var url = `http://localhost:8080/getlowprice?fNum=${num}&class=${tClass}&date=${d.toJSON()}`;
         return await fetch(url)
             .then(response => response.json())      
     }
@@ -66,7 +65,6 @@ const SearchForm = () => {
     async function getFlightAvailblity(flight){
         let d = new Date(flight.departureTime)
         var url = `http://localhost:8080/getAvailability?depTime=${d.toJSON()}&flightNum=${flight.flightNumber}&depSeats=${numberOfTravellers}&class=${tClass}`;
-        console.log(url)
         return await fetch(url)
            .then(response => response.json())   
     }
@@ -79,10 +77,6 @@ const SearchForm = () => {
                 if(num == 1)
                 {
                     getFlightAvailblity(item).then(available=>{ 
-                        console.log('There ');
-                        console.log(item.flightNumber);
-                        console.log(available.length);
-                        console.log(available);
                         if(available.length > 0)
                         {
                             setFlightData(old =>[...old, item])
@@ -92,13 +86,8 @@ const SearchForm = () => {
                 }
                 else{
                     getFlightAvailblity(item).then(available=>{ 
-                        console.log('return')
-                        console.log(item.flightNumber);
-                        console.log(available.length);
-                        console.log(available);
                         if(available.length > 0)
                         {
-                            console.log('im in the if statement')
                             setReturnFlights(old =>[...old, item])
                             // setReturnFlightNumber(item.flightNumber)
                         }
@@ -154,7 +143,6 @@ const SearchForm = () => {
         }
         if(tripType === 'One-Way' && !error)
         {
-            console.log(departureDate.toJSON())
             url += `getflights?from=${destFrom}&to=${destTo}&dep=${departureDate.toJSON()}`;
             getFlightData(url , urlRe);
         }
@@ -180,9 +168,7 @@ const SearchForm = () => {
     //and render the flights and all their required details.
     return(
         <>
-            <div className="form">
-                {/* {console.log(tripType)} */}
-                
+            <div className="search-form">                
                 {tripType === 'One-Way'
                     ?<form onSubmit={handleSubmit} className="form-outline mb-2 text-center">  
                     <div>

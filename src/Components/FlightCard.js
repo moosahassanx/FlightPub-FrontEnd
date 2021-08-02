@@ -92,21 +92,19 @@ const FlightCard = (props) => {
     //checks if there are any flights found, whether the flight is one way or return, if both flights found when the trip type is return-
     //and render the results based on that to prevent errors
     const renderContent = () => {
-        console.log(flight.length + tripType);
-
-        if(flight.length == 0 && tripType == 'One-Way')
+        if(flight.length === 0 && tripType === 'One-Way')
         {
             return[
                 <h3>No Results have been found</h3>
             ]
         }
-        if(returnFlight.length == 0 && flight.length == 0)
+        if(returnFlight.length === 0 && flight.length === 0)
         {
             return[
                 <h3>No Results have been found</h3>
             ]
         }
-        if(tripType == "One-Way")
+        if(tripType === "One-Way")
         {
             return[
                 <>
@@ -115,9 +113,9 @@ const FlightCard = (props) => {
                 </>
             ]
         }
-        if(tripType == "Return")
+        if(tripType === "Return")
         {
-            if(flight.length == 0)
+            if(flight.length === 0)
             {
                 return[
                     <>
@@ -127,7 +125,7 @@ const FlightCard = (props) => {
                     </>
                     ]
             }
-            if(returnFlight.length == 0)
+            if(returnFlight.length === 0)
             {
                 return[
                     <>
