@@ -91,23 +91,6 @@ const SearchForm = () => {
         setSearch(true);
     }
 
-        async function loadPrice(data, num) {
-        data.map((item)=>{
-            getPrice(item.flightNumber, item.departureTime).then(d => {
-                item.price = d
-                if(num == 1)
-                {
-                    setFlightData(data)
-                    setFlightNumber(item.flightNumber)
-                }
-                else{
-                    setReturnFlights(data)
-                    setReturnFlightNumber(item.flightNumber)
-                }
-            })
-        })
-        setSearch(true);
-    }
     //Assyncronised function to fetch flight data from the backend depending on the type of trip
     //it uses the passed urls to make a HTTP request to the back-end, urlOne is for one-way trips and urlRe is for return
     //once the data is fetched, the returnFlights and flightData variables are set to the JSON object array
@@ -117,16 +100,17 @@ const SearchForm = () => {
         if(tripType === 'Return')
         {
             await fetch(urlRe)
+                .then(response => response.json())
+                .then(data =>{ 
+                    loadPrice(data, 2)
+                })       
+        }
+        // we always want to get the one-way trips
+        await fetch(urlOne)
             .then(response => response.json())
             .then(data =>{ 
-              loadPrice(data, 2)
-            })       
-        }
-        await fetch(urlOne)
-        .then(response => response.json())
-        .then(data =>{ 
-          loadPrice(data, 1);
-        })
+                loadPrice(data, 1);
+            })
     }
     
     
@@ -259,6 +243,7 @@ const SearchForm = () => {
                     :<form onSubmit={handleSubmit} className="form-outline mb-2 text-center">  
                         <div>
                         <br/>
+                        Trip Type:
                         <select value={tripType} onChange={handleTripType}>
                             <option value="One-Way">One-Way</option>
                             <option value="Return">Return</option>
@@ -266,7 +251,7 @@ const SearchForm = () => {
                         </div>
                         <div>
                     <br/>
-                    Number of trevlers<br/>
+                    Number of trevlers:
                         <select value={numberOfTrevlers} onChange={handleNumberOfTrevlers}>
                             <option value="1">1</option>
                             <option value="2">2</option>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Button } from 'react-bootstrap';
 
 
@@ -9,6 +9,25 @@ const FlightCard = (props) => {
     const flight = props.oneWayData;
     const returnFlight = props.returnData;
     const tripType = props.trip;
+
+    const [selectedFlight, setSelectedFlight] = useState();
+    const [selectedRetuenFlight, setSelectedRetuenFlight] = useState();
+    
+    useEffect(() => {
+        console.log("-- effects selected flights:");
+        console.log(selectedFlight);
+        console.log("-- effects selected return  flights:");
+        console.log(selectedRetuenFlight);
+        
+    }, [selectedFlight, selectedRetuenFlight ])
+    const handleSelectedFlight = (date) =>{
+        setSelectedFlight(date);
+        console.log("selected flight !!!!!!!");
+    }
+    const handleSReturnSlectedFlight = (date) =>{
+        setSelectedRetuenFlight(date);
+        console.log("selected return flight !!!!!!!");
+    }
     //converts the duration of the flight from minutes to hours and minutes
     function timeConvert(n) {
         var num = n;
@@ -24,15 +43,21 @@ const FlightCard = (props) => {
         return date;
     }
 
+
     //recieves the ISOString date and returns the time portion only
     function getTime(t)
     {
         var time = new Date(t).toLocaleTimeString();
         return time;
     }
+    
+    function createBookButton(isReturn, selectedFlight) {
+        // console.log(selectedFlight);
+        return (isReturn ? <Button variant="primary" onClick={() => handleSReturnSlectedFlight(selectedFlight)}>Book Return Flight</Button> : <Button variant="primary" onClick={() => handleSelectedFlight(selectedFlight)}>Book One-Way Flight</Button>);
+    }
 
     //this will map the flightData object array into cards and display the needed information for each flight found
-    const renderFlight = (data) =>{
+    const renderFlight = (data, isReturn) =>{
         var flightData = data;
         return[
             <>
@@ -47,10 +72,10 @@ const FlightCard = (props) => {
                         Date: {formatDate(item.departureTime)}&emsp;&emsp;&emsp;Duration: {timeConvert(item.duration + item.durationSecondLeg)}<br/>    
                         Departs At {getTime(item.departureTime)}&emsp;&emsp;&emsp;Arrives At {getTime(item.arrivalTime)} <br/>
                         Plane type: {item.planeType.details} <br/>
-                        {console.log(item.price)}
+                        {/* {console.log(item.price)} */}
                         Price: ${item.price}
                       </Card.Text>
-                      <Button variant="primary">Book Flight</Button>
+                      {createBookButton(isReturn, item)}
                     </Card.Body>
                     </Card>
                    )
@@ -70,7 +95,7 @@ const FlightCard = (props) => {
     const renderContent = () => {
         console.log(flight.length + tripType);
         // console.log(flight[0].price);
-        console.log(returnFlight);
+        // console.log(returnFlight);
         if(flight.length == 0 && tripType == 'One-Way')
         {
             return[
@@ -100,7 +125,7 @@ const FlightCard = (props) => {
                     <>
                         <h2>No flights found to {returnFlight[0].destinationCode.airport} at the selected date</h2>
                         <h2>Return FLights to {returnFlight[0].departureCode.airport}</h2>
-                        {renderFlight(returnFlight)}
+                        {renderFlight(returnFlight, false)}
                     </>
                     ]
             }
@@ -109,7 +134,7 @@ const FlightCard = (props) => {
                 return[
                     <>
                         <h2>Flights found to {flight[0].destinationCode.airport}</h2>
-                        {renderFlight(flight)}
+                        {renderFlight(flight, false)}
                         <h2>No return flights found to {flight[0].departureCode.airport} at the selected date</h2>
                     </>
                     ]
@@ -119,9 +144,9 @@ const FlightCard = (props) => {
                 return[
                     <>
                         <h2>Flights to {flight[0].destinationCode.airport}</h2>
-                        {renderFlight(flight)}
+                        {renderFlight(flight, false)}
                         <h2>Return flights to {returnFlight[0].destinationCode.airport}</h2>
-                        {renderFlight(returnFlight)}
+                        {renderFlight(returnFlight, true)}
                     </>
                 ]
             }

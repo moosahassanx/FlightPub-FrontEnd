@@ -6,6 +6,7 @@ import Groups from './Groups';
 import Business from './Business';
 import AccountManagement from './AccountManagement';
 import Discovery from './Discovery';
+import BookingPage from './BookingPage';
 
 export {
     Home,
@@ -14,4 +15,5 @@ export {
     Business,
     AccountManagement,
     Discovery,
+    BookingPage,
 }
