@@ -355,7 +355,7 @@ const SearchForm = () => {
             {search 
                 &&
                 <div className="container-fluid text-center">
-                    <FlightCard oneWayData ={flightData} returnData={returnFlights} trip ={tripType}/>
+                    <FlightCard oneWayData ={flightData} returnData={returnFlights} trip ={tripType} numberOfTravellrs ={numberOfTravellers} tType ={tClass}/>
                 </div>
             }
         </>

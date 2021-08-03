@@ -9,6 +9,8 @@ const FlightCard = (props) => {
     const flight = props.oneWayData;
     const returnFlight = props.returnData;
     const tripType = props.trip;
+    const numberOfTravellers = props.numberOfTravellrs;
+    const tClass = props.tType;
 
     const [selectedFlight, setSelectedFlight] = useState();
     const [selectedRetuenFlight, setSelectedRetuenFlight] = useState();
@@ -75,6 +77,7 @@ const FlightCard = (props) => {
                         Price: ${item.price}
                       </Card.Text>
                       {createBookButton(isReturn, item)}
+                      {console.log(item)}
                     </Card.Body>
                     </Card>
                    )
