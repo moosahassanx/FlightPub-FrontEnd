@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react'
 import '../Css/AccountManagement.css'
 import * as Icon from 'react-bootstrap-icons';
 
-const AccountManagement = () => {
+const AdminControl = () => {
 
     // local storage (refreshing the page wont make you lose login state data)
     const loginNameData = localStorage.getItem('user-login-name');
@@ -135,67 +135,9 @@ const AccountManagement = () => {
         return miniDetails;
     }
 
-    // changing password
-    function changingPassword()
-    {
-        // old password and the password that the user inputted dont match
-        var inputPassword = "\"" + document.getElementById("old-password").value + "\"";
-        if(inputPassword != loginPasswordData)
-        {
-            alert('Incorrect old password.');
-        }
-
-        // new password and the password that the user inputted dont match
-        else if(document.getElementById("new-password").value != document.getElementById("confirm-password").value)
-        {
-            alert('New password and confirm password don\'t match.');
-        }
-
-        // old password and new password are the same
-        else if(document.getElementById("old-password").value == document.getElementById("new-password").value)
-        {
-            alert('Old password and new password cannot be the same.');
-        }
-
-        // no errors, display success message
-        else
-        {
-            injectPassword();
-            alert('Password successfully changed.');
-        }
-    }
-
-    // injecting new password into db
-    async function injectPassword()
-    {
-        // creating json file to be fed into parameter
-        const loginCredentials = [{
-            userName: document.getElementById("username").value,
-            password: document.getElementById("new-password").value
-        }]
-
-        // retrieving list of users from backend
-        await fetch('http://localhost:8080/changePassword', {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: loginCredentials
-        }).then(response => {
-            if(response.ok)
-            {
-                alert("BACKEND ERROR");
-            }
-            else
-            {
-                this.setState({successMessage: "Password successfully changed."});
-            }
-        })
-    }
-
     return (
         <div className="container-fluid text-center">
-            <h1>Account Management Section</h1>
+            <h1>Admin Control</h1>
 
             <div id="accountmng-row" className="row">
 
@@ -281,7 +223,7 @@ const AccountManagement = () => {
                                     <br></br>
                                     <br></br>
                                     <div className='button-placement'>
-                                        <input className='btn-changePassword' onClick={changingPassword} type='submit' value='Change password'></input>
+                                        <input className='btn-changePassword' type='submit' value='Change password'></input>
                                     </div>                                
                                 </form>
                             </div>  
@@ -320,4 +262,4 @@ const AccountManagement = () => {
     )
 }
 
-export default AccountManagement;
+export default AdminControl;
