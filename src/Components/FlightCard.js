@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, ButtonGroup, ToggleButton } from 'react-bootstrap';
+import { Card, ButtonGroup, Button, ToggleButton } from 'react-bootstrap';
 import { FaPlaneDeparture, FaPlaneArrival } from 'react-icons/fa';
 
 
@@ -17,10 +17,7 @@ const FlightCard = (props) => {
     const [selectedRetuenFlight, setSelectedRetuenFlight] = useState();
     
     useEffect(() => {
-        console.log("-- effects selected flights:");
-        console.log(selectedFlight);
-        console.log("-- effects selected return  flights:");
-        console.log(selectedRetuenFlight);
+
     }, [selectedFlight, selectedRetuenFlight])
     useEffect(() => {
         setSelectedFlight();
@@ -73,6 +70,15 @@ const FlightCard = (props) => {
         // console.log(selectedFlight);
         return (isReturn ? <ToggleButton type="checkbox" variant="outline-dark" onClick={(e) => handleSReturnSlectedFlight(flight, e)} checked={selectedRetuenFlight ? flight===selectedRetuenFlight : false}> Select Return Flight</ToggleButton> : <ToggleButton type="checkbox" variant="outline-dark" onClick={(e) => handleSelectedFlight(flight, e)} checked={selectedFlight ? flight===selectedFlight : false}> Select Flight</ToggleButton>);
     }
+
+    // function isLoading(){
+    //         if(selectedFlight != NULL && selectedRetuenFlight != NULL){
+    //             return(true)
+    //     }
+    //         else
+    //             return(false)
+    //     }
+
 
     //this will map the flightData object array into cards and display the needed information for each flight found
     const renderFlight = (data, isReturn) =>{
@@ -175,7 +181,10 @@ const FlightCard = (props) => {
         <>
 
             <h1>Search Results</h1>    
-            {renderContent()}
+            {renderContent()}<br/>
+            <Button variant="primary"  onClick={event =>  window.location.href='/TicketSelectionPage'} disabled={!selectedFlight && !selectedRetuenFlight} >
+                 Continue to Booking
+            </Button>
         </>
     )
 }

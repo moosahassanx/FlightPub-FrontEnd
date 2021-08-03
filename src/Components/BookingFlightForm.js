@@ -95,7 +95,7 @@ class FlightBookingForm extends React.Component
         return (
           <div className="Centering">
                   <form>
-                              <div class="registerButtonArea">  <input type="submit" className="button"  value="Close Form" /></div> 
+                    <div class="registerButtonArea">  <input type="submit" className="button"  value="Close Form" /></div> 
                   </form>
           </div>
           );
