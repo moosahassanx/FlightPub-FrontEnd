@@ -7,6 +7,7 @@ import Business from './Business';
 import AccountManagement from './AccountManagement';
 import Discovery from './Discovery';
 import BookingPage from './BookingPage';
+import TicketSelectionPage from './TicketSelectionPage';
 
 export {
     Home,
@@ -16,4 +17,5 @@ export {
     AccountManagement,
     Discovery,
     BookingPage,
+    TicketSelectionPage,
 }
