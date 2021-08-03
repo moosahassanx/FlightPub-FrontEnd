@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Button } from 'react-bootstrap';
+import { Card, ButtonGroup, ToggleButton } from 'react-bootstrap';
+import { FaPlaneDeparture, FaPlaneArrival } from 'react-icons/fa';
 
 
 //this component is to be extended with booking, and also a filter and sort options are also to be implemented
@@ -20,15 +21,30 @@ const FlightCard = (props) => {
         console.log(selectedFlight);
         console.log("-- effects selected return  flights:");
         console.log(selectedRetuenFlight);
+    }, [selectedFlight, selectedRetuenFlight])
+    useEffect(() => {
+        setSelectedFlight();
+        setSelectedRetuenFlight();
         
-    }, [selectedFlight, selectedRetuenFlight ])
-    const handleSelectedFlight = (date) =>{
-        setSelectedFlight(date);
-        console.log("selected flight !!!!!!!");
+    }, [])
+    const handleSelectedFlight = (data, e) =>{
+        if(data === selectedFlight){
+            setSelectedFlight();
+        }
+        else{
+            setSelectedFlight(data);
+        }
+        e.preventDefault();
     }
-    const handleSReturnSlectedFlight = (date) =>{
-        setSelectedRetuenFlight(date);
-        console.log("selected return flight !!!!!!!");
+    const handleSReturnSlectedFlight = (data, e) =>{
+        if(data === selectedRetuenFlight)
+        {
+            setSelectedRetuenFlight();
+        }
+        else{
+            setSelectedRetuenFlight(data);
+        }
+        e.preventDefault();
     }
     //converts the duration of the flight from minutes to hours and minutes
     function timeConvert(n) {
@@ -53,9 +69,9 @@ const FlightCard = (props) => {
         return time;
     }
     
-    function createBookButton(isReturn, selectedFlight) {
+    function createBookButton(isReturn, flight) {
         // console.log(selectedFlight);
-        return (isReturn ? <Button variant="primary" onClick={() => handleSReturnSlectedFlight(selectedFlight)}>Book Return Flight</Button> : <Button variant="primary" onClick={() => handleSelectedFlight(selectedFlight)}>Book One-Way Flight</Button>);
+        return (isReturn ? <ToggleButton type="checkbox" variant="outline-dark" onClick={(e) => handleSReturnSlectedFlight(flight, e)} checked={selectedRetuenFlight ? flight===selectedRetuenFlight : false}> Select Return Flight</ToggleButton> : <ToggleButton type="checkbox" variant="outline-dark" onClick={(e) => handleSelectedFlight(flight, e)} checked={selectedFlight ? flight===selectedFlight : false}> Select Flight</ToggleButton>);
     }
 
     //this will map the flightData object array into cards and display the needed information for each flight found
@@ -63,13 +79,14 @@ const FlightCard = (props) => {
         var flightData = data;
         return[
             <>
+            <ButtonGroup size="lg" className="mb-4">
                 { flightData.map((item, index) => {
                    return(
                    <Card key = {index}>
                     <Card.Header as="h5">Flight {item.flightNumber}</Card.Header>
                     <Card.Body>
-                      <Card.Title>From: {item.departureCode.destinationCode}, {item.departureCode.countryCode3.countryName}
-                       &emsp;&emsp;&emsp;To: {item.destinationCode.destinationCode}, {item.destinationCode.countryCode3.countryName} </Card.Title>
+                      <Card.Title><FaPlaneDeparture/> {item.departureCode.destinationCode}, {item.departureCode.countryCode3.countryName}
+                       &emsp;&emsp;&emsp;<FaPlaneArrival/> {item.destinationCode.destinationCode}, {item.destinationCode.countryCode3.countryName} </Card.Title>
                       <Card.Text>
                         Date: {formatDate(item.departureTime)}&emsp;&emsp;&emsp;Duration: {timeConvert(item.duration + item.durationSecondLeg)}<br/>    
                         Departs At {getTime(item.departureTime)}&emsp;&emsp;&emsp;Arrives At {getTime(item.arrivalTime)} <br/>
@@ -83,6 +100,7 @@ const FlightCard = (props) => {
                    )
                 })
                 }
+                </ButtonGroup>
              </>
         ]
     }
