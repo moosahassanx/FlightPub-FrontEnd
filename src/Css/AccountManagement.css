@@ -119,6 +119,14 @@
   padding-top: 30px;
 }
 
+.account-detail-middle
+{
+  width: 100%;
+  float: left;
+  text-align: center;
+  font-weight: bold;
+}
+
 .button-placement
 {
   text-align: center;

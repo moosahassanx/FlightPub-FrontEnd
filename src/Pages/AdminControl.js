@@ -1,7 +1,10 @@
 // imports
 import {useState, useEffect} from 'react'
-import '../Css/AccountManagement.css'
+import '../Css/AdminControl.css'
 import * as Icon from 'react-bootstrap-icons';
+import BlackListDestinations from '../Components/BlacklistDestinations';
+import AdminViewDestinations from '../Components/AdminViewDestinations';
+import AdminViewUsers from '../Components/AdminViewUsers';
 
 const AdminControl = () => {
 
@@ -149,9 +152,9 @@ const AdminControl = () => {
 
                     {/* All buttons to control right div */}
                     <div className="btn-group-vertical">
-                        <button className='controller-button' onClick={controlViewBookings} id='viewBookings' value='viewBookings'><Icon.JournalBookmarkFill/> <span className='icon-spacer'>View Bookings</span></button>
-                        <button className='controller-button' onClick={controlMyDetails} id='myDetails' value='myDetails'><Icon.PersonCircle /> <span className='icon-spacer'>My Details</span></button>
-                        <button className='controller-button' onClick={controlChangePassword} id='changePassword' value='changePassword'><Icon.KeyFill/> <span className='icon-spacer'>Change Password</span></button>
+                        <button className='controller-button' onClick={controlViewBookings} id='viewBookings' value='viewBookings'><Icon.JournalBookmarkFill/> <span className='icon-spacer'>View Permission Requests</span></button>
+                        <button className='controller-button' onClick={controlMyDetails} id='myDetails' value='myDetails'><Icon.PersonCircle /> <span className='icon-spacer'>Blacklist Destinations</span></button>
+                        <button className='controller-button' onClick={controlChangePassword} id='changePassword' value='changePassword'><Icon.KeyFill/> <span className='icon-spacer'>Delete Users</span></button>
                     </div>
                 </div>
 
@@ -162,26 +165,13 @@ const AdminControl = () => {
                         openMyDetails === true ? (
                             <div>
                                 <div className='right-panel-header'>
-                                    <h3>Account Details</h3>
+                                    <h3>Blacklist a Destination</h3>
                                 </div>
 
                                 {/* setting LHS for details */}
                                 <div className='account-detail-parent'>
-                                    <div className='account-detail-left'>
-                                        <p>ID: </p>
-                                        <p>E-mail: </p>
-                                        <p>First name: </p>
-                                        <p>Last name: </p>
-                                        <p>Phone: </p>
-                                        <p>Address: </p>
-                                        <p>Password: </p>
-                                    </div>
-
-                                    {/* iterate through everything in userDetails array and render on new line */}
-                                    <div className='account-detail-right'>
-                                        {userDetails.map((reptile) => (
-                                            <p>{reptile}</p>
-                                        ))}
+                                    <div className='account-detail-middle'>
+                                        <AdminViewDestinations />
                                     </div>
                                 </div>
                             </div>                            
@@ -192,40 +182,15 @@ const AdminControl = () => {
                         openChangePassword === true ? (
                             <div>
                                 <div className='right-panel-header'>
-                                    <h3>Change Password</h3>
+                                    <h3>Delete a Certain User</h3>
                                 </div>
 
-                                <form>
-                                    <div className='account-detail-parent'>
-                                        {/* labels */}
-                                        <div className='account-detail-left'>
-                                            <label className='labeller' >Old password: </label> <br></br>
-                                            <label className='labeller'>New password: </label> <br></br>
-                                            <label className='labeller'>Confirm new password: </label>
-                                        </div>
-
-                                        {/* input text fields */}
-                                        <div className='account-detail-right'>
-                                            <input className='inputter' id='old-password' type='password'></input> <br></br>                                    
-                                            <input className='inputter' id='new-password' type='password'></input> <br></br>
-                                            <input className='inputter' id='confirm-password' type='password'></input>
-                                        </div>                                        
-                                    </div>   
-
-                                    {/* divs were off in height by 1 pixel otherwise css places button on {float: right;} */}
-                                    <br></br>
-                                    <br></br>
-                                    <br></br>
-                                    <br></br>
-                                    <br></br>
-                                    <br></br>
-                                    <br></br>
-                                    <br></br>
-                                    <br></br>
-                                    <div className='button-placement'>
-                                        <input className='btn-changePassword' type='submit' value='Change password'></input>
-                                    </div>                                
-                                </form>
+                                <div className='account-detail-parent'>
+                                    {/* input text fields */}
+                                    <div className='account-detail-middle'>
+                                    <AdminViewUsers />
+                                    </div>
+                                </div>
                             </div>  
                         ) : null
                     }   
@@ -234,22 +199,13 @@ const AdminControl = () => {
                         openViewBookings === true ? (
                             <div>
                                 <div className='right-panel-header'>
-                                  <h3>My Bookings</h3>
+                                  <h3>View Permission Requests</h3>
                                 </div>
 
+                                {/* setting LHS for details */}
                                 <div className='account-detail-parent'>
-                                    {/* setting LHS for details */}
-                                    <div className='account-detail-left'>
-                                        <p>Flight number: </p>
-                                        <p>Departure: </p>
-                                        <p>Arrival: </p>
-                                    </div>
-
-                                    {/* retrieving and rendering details */}
-                                    <div className='account-detail-right'>
-                                        <p>PLACEHOLDER TEXT </p>
-                                        <p>PLACEHOLDER TEXT </p>
-                                        <p>PLACEHOLDER TEXT </p>
+                                    <div className='account-detail-middle'>
+                                        <BlackListDestinations />
                                     </div>
                                 </div>
                             </div>

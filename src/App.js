@@ -7,6 +7,7 @@ import './Css/app.css'
 import 'react-dates/lib/css/_datepicker.css';
 import 'react-dates/initialize';
 import AdminControl from './Pages/AdminControl';
+import ApplyForPosition from './Pages/ApplyForPosition';
 
  // Implementing React Router for the use of SPA and conditionally rendering pages
 const Routing = () => {
@@ -23,6 +24,7 @@ const Routing = () => {
                             <Route exact path="/accountManagement" component={AccountManagement} />
                             <Route exact path="/Discovery" component={Discovery} />
                             <Route exact path="/adminControl" component={AdminControl} />
+                            <Route exact path="/applyForPosition" component={ApplyForPosition} />
                         </Switch>
                 </Router>
             </div>
