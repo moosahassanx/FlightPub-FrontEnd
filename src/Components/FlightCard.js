@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card, ButtonGroup, Button, ToggleButton } from 'react-bootstrap';
 import { FaPlaneDeparture, FaPlaneArrival } from 'react-icons/fa';
+import { getDate } from '../Util/GetDate';
 
 
 //this component is to be extended with booking, and also a filter and sort options are also to be implemented
@@ -17,13 +18,19 @@ const FlightCard = (props) => {
     const [selectedRetuenFlight, setSelectedRetuenFlight] = useState();
     
     useEffect(() => {
-
-    }, [selectedFlight, selectedRetuenFlight])
-    useEffect(() => {
         setSelectedFlight();
         setSelectedRetuenFlight();
-        
-    }, [])
+        sessionStorage.clear()
+    }, [props])
+
+    useEffect(() => {
+        sessionStorage.setItem('flight', JSON.stringify(selectedFlight));
+        sessionStorage.setItem('passNum', numberOfTravellers);
+        sessionStorage.setItem('ticketClass', tClass);
+        if(selectedRetuenFlight)
+            sessionStorage.setItem('returnFlight', JSON.stringify(selectedRetuenFlight));
+    }, [selectedFlight, selectedRetuenFlight])
+
     const handleSelectedFlight = (data, e) =>{
         if(data === selectedFlight){
             setSelectedFlight();
@@ -83,24 +90,30 @@ const FlightCard = (props) => {
     //this will map the flightData object array into cards and display the needed information for each flight found
     const renderFlight = (data, isReturn) =>{
         var flightData = data;
+        console.log(data)
         return[
             <>
             <ButtonGroup size="lg" className="mb-4">
                 { flightData.map((item, index) => {
                    return(
                    <Card key = {index}>
-                    <Card.Header as="h5">Flight {item.flightNumber}</Card.Header>
+                    <Card.Header as="h5">{item.airlineCode.airlineName}&emsp;Flight {item.flightNumber}</Card.Header>
                     <Card.Body>
                       <Card.Title><FaPlaneDeparture/> {item.departureCode.destinationCode}, {item.departureCode.countryCode3.countryName}
                        &emsp;&emsp;&emsp;<FaPlaneArrival/> {item.destinationCode.destinationCode}, {item.destinationCode.countryCode3.countryName} </Card.Title>
                       <Card.Text>
-                        Date: {formatDate(item.departureTime)}&emsp;&emsp;&emsp;Duration: {timeConvert(item.duration + item.durationSecondLeg)}<br/>    
-                        Departs At {getTime(item.departureTime)}&emsp;&emsp;&emsp;Arrives At {getTime(item.arrivalTime)} <br/>
+                        Departure Date: {formatDate(item.departureTime)}&emsp;&emsp;&emsp;Arrival Date: {formatDate(item.arrivalTime)}<br/>    
+                        Departure Time: {getTime(item.departureTime)}&emsp;&emsp;&emsp;Arrival Time {getTime(item.arrivalTime)} <br/>
+                        <b>{item.stopOverCode? 'Stop over location: '+ item.stopOverCode.airport + ', ' + item.stopOverCode.countryCode3.countryName:''}</b><br/>
+                        {item.stopOverCode? 'Arrival date stop over: '+ formatDate(item.arrivalTimeStopOver):''}&emsp;&emsp;&emsp;
+                        {item.stopOverCode? 'Departure date stop over: '+ formatDate(item.departureTimeStopOver):''}<br/>
+                        {item.stopOverCode? 'Arrival time stop over: '+ getTime(item.arrivalTimeStopOver):''}&emsp;&emsp;&emsp;
+                        {item.stopOverCode? 'Departure time stop over: '+ getTime(item.departureTimeStopOver):''}<br/>
+                        Duration: {timeConvert(item.duration + item.durationSecondLeg)}<br/>
                         Plane type: {item.planeType.details} <br/>
-                        Price: ${item.price}
+                        Price from ${item.price}
                       </Card.Text>
                       {createBookButton(isReturn, item)}
-                      {console.log(item)}
                     </Card.Body>
                     </Card>
                    )

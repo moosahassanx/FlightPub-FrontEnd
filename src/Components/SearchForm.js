@@ -160,6 +160,9 @@ const SearchForm = () => {
 
     //this sets the data variables to null everytime the component mounts to prevent old searches from presisting
     useEffect(() => {
+        sessionStorage.clear()
+    }, [])
+    useEffect(() => {
         setMaxDate(in1Years);
      }, [tripType])
     //conditional rendering where only the required fields are shown depending on the trip type selected.
