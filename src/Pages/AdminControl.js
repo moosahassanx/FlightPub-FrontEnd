@@ -5,6 +5,7 @@ import * as Icon from 'react-bootstrap-icons';
 import BlackListDestinations from '../Components/BlacklistDestinations';
 import AdminViewDestinations from '../Components/AdminViewDestinations';
 import AdminViewUsers from '../Components/AdminViewUsers';
+import AdminViewSponsoredAirlines from '../Components/AdminViewSponsoredAirlines';
 
 const AdminControl = () => {
 
@@ -18,6 +19,7 @@ const AdminControl = () => {
     const [openMyDetails, setMyDetails] = useState(false);
     const [openChangePassword, setChangePassword] = useState(false);
     const [openViewBookings, setViewBookings] = useState(true);
+    const [openViewSponsoredAirlines, setopenViewSponsoredAirlines] = useState(false);
     const [userDetails, setUserDetails] = useState([]);
 
     // button functions for controlling boolean states
@@ -25,10 +27,13 @@ const AdminControl = () => {
     {
         getUserDetails();
 
+        // set openMyDetails to true
         if(openMyDetails == false)
         {
             setMyDetails(true)
         }
+
+        // everything else to false
         if(openChangePassword == true)
         {
             setChangePassword(false)
@@ -36,6 +41,10 @@ const AdminControl = () => {
         if(openViewBookings == true)
         {
             setViewBookings(false)
+        }
+        if(openViewSponsoredAirlines == true)
+        {
+            setopenViewSponsoredAirlines(false)
         }
     }
     function controlChangePassword()
@@ -52,6 +61,11 @@ const AdminControl = () => {
         {
             setViewBookings(false)
         }
+
+        if(openViewSponsoredAirlines == true)
+        {
+            setopenViewSponsoredAirlines(false)
+        }
     }
     function controlViewBookings()
     {
@@ -66,7 +80,30 @@ const AdminControl = () => {
         if(openViewBookings == false)
         {
             setViewBookings(true)
-        }        
+        }
+        if(openViewSponsoredAirlines == true)
+        {
+            setopenViewSponsoredAirlines(false)
+        }   
+    }
+    function controlViewSponsoredAirlines()
+    {
+        if(openMyDetails == true)
+        {
+            setMyDetails(false)
+        }
+        if(openChangePassword == true)
+        {
+            setChangePassword(false)
+        }
+        if(openViewBookings == true)
+        {
+            setViewBookings(false)
+        }
+        if(openViewSponsoredAirlines == false)
+        {
+            setopenViewSponsoredAirlines(true)
+        }   
     }
     
     // Async API call to fetch the users in the db
@@ -155,6 +192,8 @@ const AdminControl = () => {
                         <button className='controller-button' onClick={controlViewBookings} id='viewBookings' value='viewBookings'><Icon.JournalBookmarkFill/> <span className='icon-spacer'>View Permission Requests</span></button>
                         <button className='controller-button' onClick={controlMyDetails} id='myDetails' value='myDetails'><Icon.PersonCircle /> <span className='icon-spacer'>Blacklist Destinations</span></button>
                         <button className='controller-button' onClick={controlChangePassword} id='changePassword' value='changePassword'><Icon.KeyFill/> <span className='icon-spacer'>Delete Users</span></button>
+                        <button className='controller-button' onClick={controlViewSponsoredAirlines} id='airlineSponsors' value='airlineSponsors'><Icon.KeyFill/> <span className='icon-spacer'>Manage Sponsored Airlines</span></button>
+
                     </div>
                 </div>
 
@@ -206,6 +245,23 @@ const AdminControl = () => {
                                 <div className='account-detail-parent'>
                                     <div className='account-detail-middle'>
                                         <AdminViewUsers />
+                                    </div>
+                                </div>
+                            </div>
+                        ) : null
+                    }
+                    {
+                        // user clicked on Manage Sponsored Airlines button
+                        openViewSponsoredAirlines === true ? (
+                            <div>
+                                <div className='right-panel-header'>
+                                  <h3>Manage Sponsored Airlines</h3>
+                                </div>
+
+                                {/* setting LHS for details */}
+                                <div className='account-detail-parent'>
+                                    <div className='account-detail-middle'>
+                                        <AdminViewSponsoredAirlines />
                                     </div>
                                 </div>
                             </div>
