@@ -2,6 +2,7 @@
 import {useState, useEffect} from 'react'
 import '../Css/AccountManagement.css'
 import * as Icon from 'react-bootstrap-icons';
+import { useHistory } from "react-router-dom";
 
 const AccountManagement = () => {
 
@@ -193,6 +194,12 @@ const AccountManagement = () => {
         })
     }
 
+    // used for redirecting to apply for position page
+    const history = useHistory();
+    function handleClick() {
+        history.push("/applyForPosition");
+      }
+
     return (
         <div className="container-fluid text-center">
             <h1>Account Management Section</h1>
@@ -210,6 +217,7 @@ const AccountManagement = () => {
                         <button className='controller-button' onClick={controlViewBookings} id='viewBookings' value='viewBookings'><Icon.JournalBookmarkFill/> <span className='icon-spacer'>View Bookings</span></button>
                         <button className='controller-button' onClick={controlMyDetails} id='myDetails' value='myDetails'><Icon.PersonCircle /> <span className='icon-spacer'>My Details</span></button>
                         <button className='controller-button' onClick={controlChangePassword} id='changePassword' value='changePassword'><Icon.KeyFill/> <span className='icon-spacer'>Change Password</span></button>
+                        <button className='controller-button' onClick={handleClick}><Icon.KeyFill/> <span className='icon-spacer'>Request Admin/Flight Agent Permissions</span></button>
                     </div>
                 </div>
 
