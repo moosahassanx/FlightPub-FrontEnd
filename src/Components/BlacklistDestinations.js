@@ -1,52 +1,73 @@
-import React from 'react';
+import {useState, useEffect} from 'react'
 import '../Css/BlackListDestinations.css';
 
 const BlackListDestinations = () => {
 
+    // use states
+    const [destinations, setDestinations] = useState([]);
+
+    // fetching list of destinations from backend
+    async function getDestinations()
+    {
+        // retrieve data from db
+        await fetch('http://localhost:8080/getDestinations')
+        .then(response => response.json())
+        .then(json => setDestinations(json))
+    }
+
+    // render the destinations
+    function renderDestinations()
+    {
+        // loading destinations on startup if possible
+        if(destinations == null)
+        {
+            getDestinations()
+        }
+
+        console.log(destinations);
+
+        // render the list
+        return (
+            <div className="full-name">
+                {destinations.map((destination) => (
+
+                    <div>
+                        <div className="full-name">
+                            <h3>{destination.airport}</h3>
+                        </div>
+
+                        <div className="other-shit">
+                            <h5>Number of times booked: {destination.timesBooked}</h5>
+                            {
+                                destination.blacklisted == '1' ? (
+                                    <h5>Blacklisted: True</h5>
+                                )
+                                :
+                                <h5>Blacklisted: False</h5>
+                            }
+
+                            <button>set blacklisted</button>
+                            <button>set unblacklisted</button>
+
+                            <hr></hr>
+                        </div>
+                    </div>
+                    
+                ))}
+            </div>
+        )
+
+    }
 
     return (
         <div className="single-card">
-            {/* sql: SELECT * FROM user_accounts WHERE applied = 'true' and display their form */}
+            
+            {/* render the fetched destinations */}
             <div className="full-name">
-                <h3>Simon Stagg</h3>
-            </div>
-            <div className="other-shit">
-                <h4>Why would you like to become an admin?</h4>
-                <p>I wanan dominate this website and kick everyone off lmao</p>
-
-                <h4>Proof of ID (image)</h4>
-                <img className="proof-id" src="https://i.imgflip.com/507x4q.jpg" alt="placeholder image for proof of id"></img>
-
-                <h4>How did you hear about FlightPub?</h4>
-                <p>saw it on the tele m98</p>
-
-                <button>accept</button>
-                <button>reject</button>
-
-                <hr></hr>
+                <button onClick={getDestinations}>Refresh Destination Listing</button>
             </div>
 
-            <div className="full-name">
-                <h3>Mike Hunt</h3>
-            </div>
-            <div className="other-shit">
-                <h4>Why would you like to become a FlightPub agent?</h4>
-                <p>i think it is really cool i wanna do that stuff cos i like it</p>
-
-                <h4>What is your background experience like as an flight agent?</h4>
-                <p>i was like man where the plane at this got me feelin some way fr fr</p>
-
-                <h4>What is your background experience like as an flight agent?</h4>
-                <p>i was like man where the plane at this got me feelin some way fr fr</p>
-
-                <h4>How did you hear about FlightPub?</h4>
-                <p>saw an ad on it on gumtree</p>
-
-                <button>accept</button>
-                <button>reject</button>
-
-                <hr></hr>
-            </div>
+            {renderDestinations()}
 
         </div>
     )

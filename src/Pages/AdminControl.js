@@ -171,7 +171,7 @@ const AdminControl = () => {
                                 {/* setting LHS for details */}
                                 <div className='account-detail-parent'>
                                     <div className='account-detail-middle'>
-                                        <AdminViewDestinations />
+                                        <BlackListDestinations />
                                     </div>
                                 </div>
                             </div>                            
@@ -205,7 +205,7 @@ const AdminControl = () => {
                                 {/* setting LHS for details */}
                                 <div className='account-detail-parent'>
                                     <div className='account-detail-middle'>
-                                        <BlackListDestinations />
+                                        <AdminViewUsers />
                                     </div>
                                 </div>
                             </div>
