@@ -15,7 +15,7 @@ const TicketSelectionPage = () => {
     const [loading, setLoading] = useState(true);
     const instance = (
         <Steps current={0}>
-        <Steps.Item title="Ticket Selection "/>
+        <Steps.Item title="Ticket Selection " onClick={event => window.location.href='/TicketSelectionPage'}/>
         <Steps.Item title="Passenger Details "/>
         <Steps.Item title='Payment'/>
         <Steps.Item title="Booking Confirmation "/>
@@ -161,7 +161,9 @@ const TicketSelectionPage = () => {
             </>
         ]
         } else{
-            <Spinner animation="border" />
+            return[
+                <Spinner animation="border" />
+            ]
         }
     }
 

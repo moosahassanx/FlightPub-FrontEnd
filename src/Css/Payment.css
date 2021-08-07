@@ -1,0 +1,21 @@
+.App-payment {
+  padding: 30px;
+}
+
+.form {
+  margin: 30px auto 0;
+  max-width: 400px;
+}
+
+.form-actions {
+  margin-top: 15px;
+}
+*/ .App-highlight {
+  font-family: serif;
+  margin: 15px auto 0;
+  max-width: 300px;
+}
+
+.App-highlight > div {
+  padding-left: 40px;
+}
