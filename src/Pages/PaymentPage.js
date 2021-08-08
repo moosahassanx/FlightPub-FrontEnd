@@ -320,7 +320,7 @@ const PaymentPage = () => {
              </div>
              </Row>
             </div>
-            <Button variant="primary"  onClick={event => window.location.href='/PaymentPage'} disabled={!paymentComplete} >
+            <Button variant="primary"  onClick={event => window.location.href='/ConfirmPage'} disabled={!paymentComplete} >
                  Next
             </Button>
      </div>

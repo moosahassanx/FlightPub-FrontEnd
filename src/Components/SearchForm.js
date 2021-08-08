@@ -74,7 +74,7 @@ const SearchForm = () => {
         data.map((item)=>{
             getPrice(item.flightNumber, item.departureTime).then(d => {
                 item.price = d
-                if(num == 1)
+                if(num === 1)
                 {
                     getFlightAvailblity(item).then(available=>{ 
                         if(available.length > 0)
