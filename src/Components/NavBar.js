@@ -163,6 +163,7 @@ const NavBar = () => {
                 <Nav.Link href="\">Home</Nav.Link>
                 <Nav.Link href="\features">Features</Nav.Link>
                 <Nav.Link href="\Groups">Groups</Nav.Link>
+                 
 
                 {/* only appear when the user has logged in */}
                 {

@@ -1,0 +1,21 @@
+.App-payment {
+  padding: 30px;
+  position: relative;
+  right: 0px;
+}
+.tickets {
+  width: 400px;
+}
+.passDetails {
+  position: relative;
+  right: 0px;
+  max-width: 400px;
+}
+.form {
+  margin: 30px;
+  max-width: 400px;
+}
+
+.form-actions {
+  margin-top: 15px;
+}
