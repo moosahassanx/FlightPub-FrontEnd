@@ -256,7 +256,7 @@ const SearchForm = () => {
                         />
                     </div>
                     <br/>
-                    <input type="submit" value="Search Flights" className="col-2"/>
+                    <input type="submit" value="Search Flights" className="btn btn-secondary btn-lg"/>
                     </form>
                     :<form onSubmit={handleSubmit} className="form-outline mb-2 text-center">  
                         <div>
@@ -351,7 +351,7 @@ const SearchForm = () => {
                             />
                         </div>
                         <br/>
-                        <input type="submit" value="Search Flights" className="col-2"/>
+                        <input type="submit" value="Search Flights" className="btn btn-secondary btn-lg"/>
                     </form>
                 }
             </div>

@@ -71,7 +71,7 @@ const TicketSelectionPage = () => {
     useEffect(() => {
         sessionStorage.setItem('ticket', JSON.stringify(selectedTicket));
         if(selectedReTicket)
-            sessionStorage.setItem('retrunTicket', JSON.stringify(selectedReTicket));    
+            sessionStorage.setItem('returnTicket', JSON.stringify(selectedReTicket));    
     }, [selectedReTicket, selectedTicket])
 
     const handleSelectedTicket = (data, e) =>{
@@ -108,7 +108,7 @@ const TicketSelectionPage = () => {
                 <h2>Flight {flight.flightNumber} &emsp; <FaPlaneDeparture/> {flight.departureCode.airport}, {flight.departureCode.countryCode3.countryName} &emsp;
                 <FaPlaneArrival/> {flight.destinationCode.airport}, {flight.destinationCode.countryCode3.countryName} <br/>  </h2>
                 <h3>Please select the desired ticket type for your flight</h3>
-                <ButtonToolbar size="lg" className="mb-4">
+                <ButtonToolbar size="lg" className="mb-4 d-flex justify-content-center">
                         { flightTickets.map((item, index) => {
                             return(
                             <Card key = {index}>
@@ -134,7 +134,7 @@ const TicketSelectionPage = () => {
                     <>
                      <h2> Return Flight {returnFlight.flightNumber} &emsp; <FaPlaneDeparture/> {returnFlight.departureCode.airport}, {returnFlight.departureCode.countryCode3.countryName} &emsp;
                      <FaPlaneArrival/> {returnFlight.destinationCode.airport}, {returnFlight.destinationCode.countryCode3.countryName} </h2>
-                     <ButtonToolbar size="lg" className="mb-4">
+                     <ButtonToolbar size="lg" className="mb-4 d-flex justify-content-center">
                              { returnTickets.map((item, index) => {
                                  return(
                                  <Card key = {index}>

@@ -19,7 +19,7 @@ const BookingPage = () => {
     const [email, setEmail] = useState();
     const [passNum, setPassNum]  = useState(1);
     const instance = (
-        <Steps current={1}>
+        <Steps current={1} style={{cursor: "pointer"}}>
             <Steps.Item title="Ticket Selection "/>
             <Steps.Item title="Passenger Details "/>
             <Steps.Item title='Payment'/>
