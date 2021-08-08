@@ -53,7 +53,8 @@ const PaymentPage = () => {
         setReTicket(JSON.parse(sessionStorage.getItem('returnTicket')))
         setPassData(JSON.parse(sessionStorage.getItem('formData')));
     }, [])
-    
+
+
     async function makePayment(){
         let userId = "";
         let url = "";
