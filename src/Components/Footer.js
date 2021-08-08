@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import TravelBot from './TravelBot'
 import '../Css/footer.css'
+import { AiFillFacebook, AiFillTwitterCircle, AiFillInstagram } from "react-icons/ai";
+import { GrFacebook } from "react-icons/gr";
+
 
 const Footer = () => {
 
@@ -30,9 +33,11 @@ const Footer = () => {
 
                     </div>
                     {/* Col 3 */}
-                    <div className="col-md-3">
-                        <h2>Find us</h2>
-                        
+                    <div className="list-unstyled">
+                        <h2>Follow us</h2>
+                        <GrFacebook /> Facebook<br/>
+                        <AiFillTwitterCircle /> Twitter<br/>
+                        <AiFillInstagram/>Instagram
                     </div>
 
                 </div>
