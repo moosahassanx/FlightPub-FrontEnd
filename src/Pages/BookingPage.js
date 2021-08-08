@@ -81,6 +81,10 @@ const BookingPage = () => {
                 }
             })
         }
+        setFName('');
+        setLName('');
+        setPNum('');
+        setEmail('');
         sessionStorage.setItem("formData", JSON.stringify(formData));
     }, [formData])
 
@@ -112,7 +116,7 @@ const BookingPage = () => {
         if (!email) {
             errors +="email cannot be blank.\n";
         }
-        else if (!email.includes("@") || !email.includes(".com")) {
+        else if (!email.includes("@") || !email.includes(".")) {
             errors +="invalid email.\n";
         } 
         if (errors.length > 0) {
@@ -134,6 +138,11 @@ const BookingPage = () => {
     const handlePNum = (e) =>{
         setPNum(e.target.value);
         console.log(pNum)
+    }
+    const handleRemove = (i) =>{
+        console.log(i)
+        const newList = formData.filter((item) => item !== i);
+        setFormData(newList);
     }
     const handleSubmit = (e) =>{
         if(validates()){
@@ -282,7 +291,10 @@ const BookingPage = () => {
                             <Col>
                                 Phone Number: {data.pNum}
                             </Col>
-                        </Row>   
+                        </Row> 
+                        <Button variant="outline-danger" onClick={event => handleRemove(data)}>
+                            Remove
+                        </Button>  
                     </div>
                 ]
             })

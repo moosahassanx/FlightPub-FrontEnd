@@ -24,6 +24,7 @@ const PaymentPage = () => {
     const [name, setName] = useState("");
     const [expiry, setExpiry] = useState("");
     const [cvc, setCvc] = useState("");
+    const [bookRef, setBookRef] = useState([]);
     let total = 0;
     const instance = (
         <Steps current={2} style={{cursor: "pointer"}}>
@@ -52,13 +53,13 @@ const PaymentPage = () => {
         setTicket(JSON.parse(sessionStorage.getItem('ticket')));
         setReTicket(JSON.parse(sessionStorage.getItem('returnTicket')))
         setPassData(JSON.parse(sessionStorage.getItem('formData')));
+        sessionStorage.removeItem('bookId');
     }, [])
 
 
     async function makePayment(){
         let userId = "";
         let url = "";
-        console.log('in pay');
         if(loggedIn){
             userId = passData[0].userId;
             url = `http://localhost:8080/makeRPayment?price=${total}&userId=${userId}`
@@ -70,28 +71,40 @@ const PaymentPage = () => {
         .then(res => res.json())
         .then(data => {
             setPayId(data)
-            console.log(data)
         })
     }
 
+    useEffect(() => {
+        sessionStorage.setItem("bookId", JSON.stringify(bookRef));
+    }, [bookRef])
     async function makeBooking(){
         Promise.all(passData.map((item)=>{
             let date = new Date(flight.departureTime)
             date.setTime(date.getTime() + (10*60*60*1000));
             date = date.toISOString()
-            console.log(date)
             if(loggedIn){
                 let urlReg = `http://localhost:8080/makeRBooking?fNumber=${flight.flightNumber}&payComp=Yes&payId=${payId}&uId=${item.userId}&aCode=${flight.airlineCode.airlineCode}&fDepTime=${date}&DesCode=${flight.destinationCode.destinationCode}&classCode=${ticket.ticketClass.classCode}&ticketCode=${ticket.ticketType.ticketCode}`
                 let urlRegGuest = `http://localhost:8080/makeBooking?fNumber=${flight.flightNumber}&payComp=Yes&payId=${payId}&uId=${item.userId}&gUId=${item.gUserId}&aCode=${flight.airlineCode.airlineCode}&fDepTime=${date}&DesCode=${flight.destinationCode.destinationCode}&classCode=${ticket.ticketClass.classCode}&ticketCode=${ticket.ticketType.ticketCode}`
                 if(!item.gUserId){
-                   fetch(urlReg).then(r => r.json())
+                   fetch(urlReg).then(r => r.json()).then(data => { 
+                       setBookRef(old => [...old, {bookId: data, user: item.fName + " " + item.lName, flightNum: flight.flightNumber,
+                    flightDep: flight.departureCode.airport, flightArr: flight.destinationCode.airport, flightDepTime: flight.departureTime, flightArrDate: flight.arrivalTime,
+                    class: ticket.ticketClass.details, type: ticket.ticketType.name, total: ticket.totalPrice}])
+                   })
                 } else {
-                    fetch(urlRegGuest).then(r => r.json())
+                    fetch(urlRegGuest).then(r => r.json()).then(data => {
+                        setBookRef(old => [...old, {bookId: data, user: item.fName + " " + item.lName, flightNum: flight.flightNumber,
+                     flightDep: flight.departureCode.airport, flightArr: flight.destinationCode.airport, flightDepTime: flight.departureTime, flightArrDate: flight.arrivalTime,
+                     class: ticket.ticketClass.details, type: ticket.ticketType.name, total: ticket.totalPrice}])
+                    })
                 }
             } else {
                 let urlGuest = `http://localhost:8080/makeGBooking?fNumber=${flight.flightNumber}&payComp=Yes&payId=${payId}&gUId=${item.gUserId}&aCode=${flight.airlineCode.airlineCode}&fDepTime=${date}&DesCode=${flight.destinationCode.destinationCode}&classCode=${ticket.ticketClass.classCode}&ticketCode=${ticket.ticketType.ticketCode}`
-                console.log(urlGuest)
-                fetch(urlGuest).then(r => r.json())
+                fetch(urlGuest).then(r => r.json()).then(data => { 
+                    setBookRef(old => [...old, {bookId: data, user: item.fName + " " + item.lName, flightNum: flight.flightNumber,
+                 flightDep: flight.departureCode.airport, flightArr: flight.destinationCode.airport, flightDepTime: flight.departureTime, flightArrDate: flight.arrivalTime,
+                 class: ticket.ticketClass.details, type: ticket.ticketType.name, total: ticket.totalPrice}])
+                })
             }
         }));
         if(reTicket){
@@ -99,18 +112,29 @@ const PaymentPage = () => {
                 let date = new Date(returnFlight.departureTime)
                 date.setTime(date.getTime() + (10*60*60*1000));
                 date = date.toISOString()
-                console.log(date)
                 if(loggedIn){
                     let urlReg = `http://localhost:8080/makeRBooking?fNumber=${returnFlight.flightNumber}&payComp=Yes&payId=${payId}&uId=${item.userId}&aCode=${returnFlight.airlineCode.airlineCode}&fDepTime=${date}&DesCode=${returnFlight.destinationCode.destinationCode}&classCode=${reTicket.ticketClass.classCode}&ticketCode=${reTicket.ticketType.ticketCode}`
                     let urlRegGuest = `http://localhost:8080/makeBooking?fNumber=${returnFlight.flightNumber}&payComp=Yes&payId=${payId}&uId=${item.userId}&gUId=${item.gUserId}&aCode=${returnFlight.airlineCode.airlineCode}&fDepTime=${date}&DesCode=${returnFlight.destinationCode.destinationCode}&classCode=${reTicket.ticketClass.classCode}&ticketCode=${reTicket.ticketType.ticketCode}`
                     if(!item.gUserId){
-                       fetch(urlReg).then(r => r.json())
+                       fetch(urlReg).then(r => r.json()).then(data => {
+                        setBookRef(old => [...old, {bookId: data, user: item.fName + " " + item.lName, flightNum: returnFlight.flightNumber,
+                     flightDep: returnFlight.departureCode.airport, flightArr: returnFlight.destinationCode.airport, flightDepTime: returnFlight.departureTime, flightArrDate: returnFlight.arrivalTime,
+                     class: reTicket.ticketClass.details, type: reTicket.ticketType.name, total: reTicket.totalPrice}])
+                    })
                     } else {
-                        fetch(urlRegGuest).then(r => r.json())
+                        fetch(urlRegGuest).then(r => r.json()).then(data => {
+                            setBookRef(old => [...old, {bookId: data, user: item.fName + " " + item.lName, flightNum: returnFlight.flightNumber,
+                         flightDep: returnFlight.departureCode.airport, flightArr: returnFlight.destinationCode.airport, flightDepTime: returnFlight.departureTime, flightArrDate: returnFlight.arrivalTime,
+                         class: reTicket.ticketClass.details, type: reTicket.ticketType.name, total: reTicket.totalPrice}])
+                        })
                     }
                 } else {
                     let urlGuest = `http://localhost:8080/makeGBooking?fNumber=${returnFlight.flightNumber}&payComp=Yes&payId=${payId}&gUId=${item.gUserId}&aCode=${returnFlight.airlineCode.airlineCode}&fDepTime=${date}&DesCode=${returnFlight.destinationCode.destinationCode}&classCode=${reTicket.ticketClass.classCode}&ticketCode=${reTicket.ticketType.ticketCode}`
-                    fetch(urlGuest).then(r => r.json())
+                    fetch(urlGuest).then(r => r.json()).then(data => {
+                        setBookRef(old => [...old, {bookId: data, user: item.fName + " " + item.lName, flightNum: returnFlight.flightNumber,
+                     flightDep: returnFlight.departureCode.airport, flightArr: returnFlight.destinationCode.airport, flightDepTime: returnFlight.departureTime, flightArrDate: returnFlight.arrivalTime,
+                     class: reTicket.ticketClass.details, type: reTicket.ticketType.name, total: reTicket.totalPrice}])
+                    })
                 }
             }));
         }
@@ -120,7 +144,7 @@ const PaymentPage = () => {
     if (isValid) {
         setPaymentData({ issuer: issuer });
     }
-    };
+    }
 
     const handleInputFocus = ({ target }) => {
         setFocused(target.name);
@@ -141,7 +165,7 @@ const PaymentPage = () => {
         setName(target.value);
         // setPaymentData({name: target.value});
     }
-    };
+    }
 
     const handleSubmit = (e) => {
     e.preventDefault();
@@ -152,10 +176,9 @@ const PaymentPage = () => {
         return acc;
         }, {});
 
-    setPaymentData(formData);
-    makePayment()
-    console.log(paymentData);
-      };
+        setPaymentData(formData);
+        makePayment()
+    }
     const calculateTotal=()=>{
         let t = 0;
         let r = 0;

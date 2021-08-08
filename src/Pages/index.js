@@ -8,7 +8,8 @@ import AccountManagement from './AccountManagement';
 import Discovery from './Discovery';
 import BookingPage from './BookingPage';
 import TicketSelectionPage from './TicketSelectionPage';
-import PaymentPage from './PaymentPage'
+import PaymentPage from './PaymentPage';
+import ConfirmPage from './ConfirmPage';
 
 export {
     Home,
@@ -19,5 +20,6 @@ export {
     Discovery,
     BookingPage,
     TicketSelectionPage,
-    PaymentPage
+    PaymentPage,
+    ConfirmPage
 }
