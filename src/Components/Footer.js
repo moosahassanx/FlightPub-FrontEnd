@@ -17,7 +17,7 @@ const Footer = () => {
                 <div className="row">
                     {/* Col 1 */}
                     <div className="col-md-4 col-md-offset-3">
-                        <h3>Contact us</h3>
+                        <h2>Contact us</h2>
                         <ul className="list-unstyled">
                             <li>Email: enquires@flighpub.com</li>
                             <li>P: 2342 4234</li>
