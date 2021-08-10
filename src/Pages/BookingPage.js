@@ -50,12 +50,14 @@ const BookingPage = () => {
             const name = JSON.parse(localStorage.getItem('user-login-name'));
             const last = JSON.parse(localStorage.getItem('user-login-last-name'))
             setLoggedIn(JSON.parse(localStorage.getItem('user-login-state')));
-            setLoggerName(name[0]);
-            setLoggerLastName(last[0]);
-            setLoggerEmail(email[0]);
-            setFName(name[0]);
-            setLName(last[0]);
-            setEmail(email[0]);
+            if(name){
+                setLoggerName(name[0]);
+                setLoggerLastName(last[0]);
+                setLoggerEmail(email[0]);
+                setFName(name[0]);
+                setLName(last[0]);
+                setEmail(email[0]);
+            }
         }, 100);
     }, [])
     useEffect(() => {
@@ -65,7 +67,7 @@ const BookingPage = () => {
         }
             
     }, [loggerEmail])
-    
+
     async function getGUserId(item){
         let url = `http://localhost:8080/getGuserId?email=${item.email}&firstName=${item.fName}&lastName=${item.lName}&phoneNumber=${item.pNum}`
         return await fetch(url)
