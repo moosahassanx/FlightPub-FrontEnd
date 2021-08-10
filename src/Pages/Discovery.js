@@ -12,6 +12,7 @@ const Discovery = () => {
     const [loading, setLoading] = useState(false);
     
     const [covid, setCovidFlag] = useState(false);
+    const [userHistoryList, setUserHistoryList] = useState(null);
 
     // tag states
     const [beach, setBeachFlag] = useState(false);
@@ -128,11 +129,29 @@ const Discovery = () => {
         return tags.toString();
     }
 
+    function getHistoryList()
+    {
+        getHistoryRecommendations();
+    }
+
     async function getHistoryRecommendations()
     {
         let top3 = [];
 
-        await fetch('http://localhost:8080/')
+        var userName = JSON.parse(localStorage.getItem('user-login-name'));
+        console.log(userName);
+
+        await fetch('http://localhost:8080/getUserHistory?userName=' + userName[0])
+        .then(response => response.json())
+        .then(json => json.forEach(element =>
+        {
+            //top3.push(element);
+            top3.push(element.flight.destinationCode.airport);
+        }))
+
+        setUserHistoryList(top3);
+
+        return top3;
     }
 
     // tag retrieving algorithm
@@ -208,7 +227,8 @@ const Discovery = () => {
         <div className="discovery-div">
             <h1>Revisit</h1>
 
-            
+            <button className="discovery-button" onClick={getHistoryList}>Get User History</button>
+            <p>{userHistoryList}</p>
 
             <h1>Discovery</h1>
 
