@@ -18,6 +18,7 @@ const BookingPage = () => {
     const [pNum, setPNum] = useState();
     const [email, setEmail] = useState();
     const [passNum, setPassNum]  = useState(1);
+    const [logDet, setLogDet] = useState(false);
     const instance = (
         <Steps current={1} style={{cursor: "pointer"}}>
             <Steps.Item title="Ticket Selection "/>
@@ -27,42 +28,44 @@ const BookingPage = () => {
         </Steps>
       );
     async function getUserId(){
+        console.log(loggerEmail)
         let url = `http://localhost:8080/getDetails?userName=${loggerEmail}`
         return await fetch(url)
         .then(response => response.json())
         .then(data =>{
             setUserData(data);
-            setUserId(userData.id);
+            setUserId(data.id);
         })
     }
+    
     useEffect(() => {
-        // local storage (refreshing the page wont make you lose login state data)
         setPassNum(sessionStorage.getItem('passNum'));
-        const loginStateData = localStorage.getItem('user-login-state');
-        const loginNameData = localStorage.getItem('user-login-name');
-        const loginLastNameData = localStorage.getItem('user-login-last-name');
-        const loginEmailData = localStorage.getItem('user-login-email');
         let data = sessionStorage.getItem('ticket');
         let data2 = sessionStorage.getItem('returnTicket');
         if(data === null && data2 === null){
             window.location.href='/'
         }
-        if(loginStateData === 'true')      // if react picks up on previous data then use this data rather than generating entirely new page
-        {
-            console.log(loginStateData)
-            setLoggedIn(JSON.parse(loginStateData));
-            setLoggerName(JSON.parse(loginNameData));
-            setLoggerLastName(JSON.parse(loginLastNameData));
-            setLoggerEmail(JSON.parse(loginEmailData));
-            setFName(JSON.parse(loginNameData));
-            setLName(JSON.parse(loginLastNameData));
-            setEmail(JSON.parse(loginEmailData));
+        setTimeout(() => {
+            const email = JSON.parse(localStorage.getItem('user-login-email'));
+            const name = JSON.parse(localStorage.getItem('user-login-name'));
+            const last = JSON.parse(localStorage.getItem('user-login-last-name'))
+            setLoggedIn(JSON.parse(localStorage.getItem('user-login-state')));
+            setLoggerName(name[0]);
+            setLoggerLastName(last[0]);
+            setLoggerEmail(email[0]);
+            setFName(name[0]);
+            setLName(last[0]);
+            setEmail(email[0]);
+        }, 100);
+    }, [])
+    useEffect(() => {
+        console.log(loggerEmail)
+        if(loggerEmail !== 'null' && loggerEmail !== undefined){
             getUserId();
         }
-        console.log(fName);
-        
-    }, [])
-
+            
+    }, [loggerEmail])
+    
     async function getGUserId(item){
         let url = `http://localhost:8080/getGuserId?email=${item.email}&firstName=${item.fName}&lastName=${item.lName}&phoneNumber=${item.pNum}`
         return await fetch(url)
@@ -94,7 +97,7 @@ const BookingPage = () => {
         let validationRule = /^(\d|\w)+$/i;
         let pattern = /[\d]{8}/g;
         let errors = "";
-
+        console.log(fName)
         if (!fName) {
             errors += "first name cannot be blank.\n";
         }
@@ -113,10 +116,10 @@ const BookingPage = () => {
         else if (!pattern.test(pNum)) {
             errors +="phone number is incorrect. It must be a valid Australian mobile number.\n";
         }
-        if (!email) {
+        if (email !== loggerEmail && !email) {
             errors +="email cannot be blank.\n";
         }
-        else if (!email.includes("@") || !email.includes(".")) {
+        else if (email !== loggerEmail && (!email.includes("@") || !email.includes("."))) {
             errors +="invalid email.\n";
         } 
         if (errors.length > 0) {
@@ -141,12 +144,17 @@ const BookingPage = () => {
     }
     const handleRemove = (i) =>{
         console.log(i)
+        if(i.email === loggerEmail){
+            setLogDet(false)
+        }
         const newList = formData.filter((item) => item !== i);
         setFormData(newList);
     }
     const handleSubmit = (e) =>{
         if(validates()){
             if(loggerEmail === email){
+                setLogDet(true);
+                console.log('im here ')
                 setFormData(old => {
                     return [...old, {userId: userId, gUserId: '',fName: fName, lName: lName, pNum: pNum, email: email, loggedUser: true}]
                 })
@@ -165,40 +173,41 @@ const BookingPage = () => {
     }
 }
     const renderContent = () =>{
-        console.log(loggedIn)
-        if(loggedIn === true){
+        if(loggedIn === true && logDet != true){
             return[
                 <>
-                {formData.length < 1 &&
-                 <Form className="border mx-2 mb-4">
-                    <Row className="mb-2 mx-2">
-                        <Form.Group as={Col} controlId="firstName">
-                        <Form.Label>First Name</Form.Label>
-                        <Form.Control type="First Name" placeholder="First Name" defaultValue={loggerName} onChange={handleFName}/>
-                        </Form.Group>
+                {/* {console.log(formData)} */}
+                {!logDet &&
+               <> {console.log("wtf")}
+                    <Form className="border mx-2 mb-4">
+                        <Row className="mb-2 mx-2">
+                            <Form.Group as={Col} controlId="firstName">
+                            <Form.Label>First Name</Form.Label>
+                            <Form.Control type="First Name" placeholder="First Name" defaultValue={loggerName} onChange={handleFName}/>
+                            </Form.Group>
 
-                        <Form.Group as={Col} controlId="lastName">
-                        <Form.Label>Last Name</Form.Label>
-                        <Form.Control type="Last Name" placeholder="Last Name" defaultValue={loggerLastName} onChange={handleLName}/>
-                        </Form.Group>
-                    </Row>    
-                    <Row className="mb-2 mx-2">
-                        <Form.Group as={Col} controlId="formGridEmail">
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control type="email" placeholder="Enter email" defaultValue={loggerEmail}/>
-                        </Form.Group>
-                    
-                        <Form.Group as={Col} controlId="phoneNumber">
-                        <Form.Label>Phone Number</Form.Label>
-                        <Form.Control type="phone number" placeholder="Phone Number" onChange={handlePNum}/>
-                        </Form.Group>
-                    </Row>    
-                    <Button variant="outline-success" onClick={handleSubmit}>
-                        Confirm
-                    </Button>
-                </Form>
+                            <Form.Group as={Col} controlId="lastName">
+                            <Form.Label>Last Name</Form.Label>
+                            <Form.Control type="Last Name" placeholder="Last Name" defaultValue={loggerLastName} onChange={handleLName}/>
+                            </Form.Group>
+                        </Row>    
+                        <Row className="mb-2 mx-2">
+                            <Form.Group as={Col} controlId="formGridEmail">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control type="email" placeholder="Enter email" value={loggerEmail} />
+                            </Form.Group>
+                        
+                            <Form.Group as={Col} controlId="phoneNumber">
+                            <Form.Label>Phone Number</Form.Label>
+                            <Form.Control type="phone number" placeholder="Phone Number" onChange={handlePNum}/>
+                            </Form.Group>
+                        </Row>    
+                        <Button variant="outline-success" onClick={handleSubmit}>
+                            Confirm
+                        </Button>
+                    </Form></>
                 }
-                {[...Array(parseInt(passNum - formData.length ))].map((x, i) =>
+                {[...Array(parseInt(passNum - formData.length -1 ))].map((x, i) =>
                     <Form className="border mx-2 mb-4" key={i + formData.length}>
                     <Row className="mb-2 mx-2">
                         <Form.Group as={Col} controlId="firstName">

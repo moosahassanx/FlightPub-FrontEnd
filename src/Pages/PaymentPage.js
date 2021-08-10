@@ -37,12 +37,11 @@ const PaymentPage = () => {
     useEffect(() => {
         let data = sessionStorage.getItem('returnFlight');
         let data2 = sessionStorage.getItem('flight');
-        let logged = localStorage.getItem('user-login-state');
+        setTimeout(() => {
+            setLoggedIn(JSON.parse(localStorage.getItem('user-login-state')));
+        }, 100);
         if(data === null && data2 === null){
             window.location.href='/'
-        }
-        if(logged === 'true'){
-            setLoggedIn(logged)
         }
         if(data != null){
             setReturnFlight(JSON.parse(sessionStorage.getItem('returnFlight')));
@@ -56,6 +55,9 @@ const PaymentPage = () => {
         sessionStorage.removeItem('bookId');
     }, [])
 
+    useEffect(() => {
+        console.log(loggedIn)
+    }, [loggedIn])
 
     async function makePayment(){
         let userId = "";
