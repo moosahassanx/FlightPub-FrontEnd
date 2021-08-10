@@ -11,6 +11,8 @@ const Discovery = () => {
     const [listTagged, setListTagged] = useState(null);
     const [loading, setLoading] = useState(false);
     
+    const [covid, setCovidFlag] = useState(false);
+
     // tag states
     const [beach, setBeachFlag] = useState(false);
     const [alps, setAlpsFlag] = useState(false);
@@ -53,6 +55,8 @@ const Discovery = () => {
             newTags.splice(newTags.indexOf(e));
         setTags(newTags);
     }*/
+
+    function toggleCovid() { setCovidFlag(!covid); }
     
     function toggleBeachFlag() { setBeachFlag(!beach); }
     function toggleAlpsFlag() { setAlpsFlag(!alps); }
@@ -124,6 +128,13 @@ const Discovery = () => {
         return tags.toString();
     }
 
+    async function getHistoryRecommendations()
+    {
+        let top3 = [];
+
+        await fetch('http://localhost:8080/')
+    }
+
     // tag retrieving algorithm
     async function getDestinations()
     {
@@ -135,26 +146,52 @@ const Discovery = () => {
         var inputTags = getTags();
         var inputTagSplitter = inputTags.split(',');
 
-        // retrieve data from db
-        await fetch('http://localhost:8080/getDestinations')
-        .then(response => response.json())
-        .then(json => json.forEach(element => {
+        if(covid)
+        {
+            // retrieve data from db
+            await fetch('http://localhost:8080/getNonCovidDestinations')
+            .then(response => response.json())
+            .then(json => json.forEach(element => {
 
-            // iterate through every destination
-            var tagsSplitter = element.tags.split(', ');
+                // iterate through every destination
+                var tagsSplitter = element.tags.split(', ');
 
-            // check if the input tags match any of the tags in the tags in this destination
-            inputTagSplitter.forEach(i => {
-                tagsSplitter.forEach(j => {
-                    // db tag and input tag match
-                    if(i == j)
-                    {
-                        // add tag to display list
-                        taggedDestinations.push(' ' + element.airport);
-                    }
+                // check if the input tags match any of the tags in the tags in this destination
+                inputTagSplitter.forEach(i => {
+                    tagsSplitter.forEach(j => {
+                        // db tag and input tag match
+                        if(i == j)
+                        {
+                            // add tag to display list
+                            taggedDestinations.push(' ' + element.airport);
+                        }
+                    });
                 });
-            });
-        }))
+            }))
+        }
+        else
+        {
+            // retrieve data from db
+            await fetch('http://localhost:8080/getDestinations')
+            .then(response => response.json())
+            .then(json => json.forEach(element => {
+
+                // iterate through every destination
+                var tagsSplitter = element.tags.split(', ');
+
+                // check if the input tags match any of the tags in the tags in this destination
+                inputTagSplitter.forEach(i => {
+                    tagsSplitter.forEach(j => {
+                        // db tag and input tag match
+                        if(i == j)
+                        {
+                            // add tag to display list
+                            taggedDestinations.push(' ' + element.airport);
+                        }
+                    });
+                });
+            }))
+        }
 
         // set display list for rendering
         setListTagged(taggedDestinations.toString());
@@ -169,11 +206,154 @@ const Discovery = () => {
 
     return (
         <div className="discovery-div">
+            <h1>Revisit</h1>
+
+            
+
             <h1>Discovery</h1>
 
             <p>Select any images that appeal to you.</p>
 
-            {/* list of images for user to select */}
+            <h3>Geography</h3>
+            <table className='discovery-text-table'>
+                <tr>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleBeachFlag}>Beach</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleAlpsFlag}>Alps</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleRainforestFlag}>Rainforest</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleCityFlag}>City</span>
+                        </label>
+                    </td>
+                </tr>
+            </table>
+
+            <h3>Entertainment</h3>
+
+            <table className='discovery-text-table'>
+                <tr>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleSafariFlag}>Safari</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleMuseumFlag}>Museum</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleThemeParkFlag}>Theme Park</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleMusicFestivalFlag}>Music Festival</span>
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleConcertFlag}>Concert</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleWineFlag}>Wine Tours</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleScubaFlag}>Scuba Diving</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleResortFlag}>Resort</span>
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleBalloonsFlag}>Balloon Rides</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleRestaurantFlag}>Restaurants</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleSkiingFlag}>Skiing</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleHikingFlag}>Hiking</span>
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleAsianFlag}>Asian Culture</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleArchitectureFlag}>Architecture</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleSurfingFlag}>Surfing</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleFashionFlag}>Fashion</span>
+                        </label>
+                    </td>
+                </tr>
+            </table>
+
+            {/* list of images for user to select }
             <table className='discovery-table'>
                 <tr>
                     <td>
@@ -307,7 +487,15 @@ const Discovery = () => {
                 </tr>
             </table>
 
+    */}
+
             <br/>
+
+            <p>Would you like to filter out Covid-19 hotspots?</p>
+            <label className="discovery-covid-avoidance-switch">
+                <input type="checkbox"/>
+                <span className="discovery-covid-slider round" onClick={toggleCovid}></span>
+            </label>
             
             {
                 // check if page is processing
