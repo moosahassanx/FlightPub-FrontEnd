@@ -8,6 +8,7 @@ const TicketSelectionPage = () => {
     const [flight, setFlight] = useState();
     const [returnFlight, setReturnFlight] = useState();
     const [ticketClass, setTicketClass] = useState();
+    const [numberOfTravellers, setNumberOfTravellers] = useState();
     const [flightTickets, setFlightTickets] = useState([]);
     const [returnTickets, setReturnTickets] = useState([]);
     const [selectedTicket, setSelectedTicket] = useState();
@@ -23,19 +24,40 @@ const TicketSelectionPage = () => {
       );
 
     async function getTicketData(flightInfo){
+        console.log(flightInfo.ticketType.ticketCode)
+        console.log(flightInfo.flightNumber + ticketClass)
         let d = new Date(flightInfo.departureTime)
-        let url = `http://localhost:8080/getticketprice?fnum=${flightInfo.flightNumber}&tclass=${ticketClass}&depdate=${d.toISOString()}`
+        let url = `http://localhost:8080/getticketprice?fnum=${flightInfo.flightNumber}&tCode=${flightInfo.ticketType.ticketCode}&tclass=${ticketClass}&depdate=${d.toISOString()}`
+        console.log(url)
         return await fetch(url)
         .then(response => response.json())   
     }
+
+    async function getFlightAvailblity(flight){
+        let d = new Date(flight.departureTime)
+        var url = `http://localhost:8080/getAvailability?depTime=${d.toJSON()}&flightNum=${flight.flightNumber}&depSeats=${numberOfTravellers}&class=${ticketClass}`;
+        return await fetch(url)
+           .then(response => response.json())   
+    }
+
     async function getTickets(num){
         if(num === 1){
-            getTicketData(flight).then(data =>{
-                setFlightTickets(data);
+            getFlightAvailblity(flight).then(data =>{
+                Promise.all(data.map(flight =>{
+                    console.log(flight)
+                    getTicketData(flight).then(data =>{
+                        // console.log(data)
+                        setFlightTickets(old => [...old, data]);
+                    })
+                }));
             })
         } else{
-            getTicketData(returnFlight).then(data => {
-                setReturnTickets(data)
+            getFlightAvailblity(returnFlight).then(data =>{
+                Promise.all(data.map(flight =>{
+                    getTicketData(flight).then(data =>{
+                        setReturnTickets(old => [...old, data]);
+                    })
+                }));
             })
         }
     }
@@ -50,9 +72,11 @@ const TicketSelectionPage = () => {
             setReturnFlight(JSON.parse(sessionStorage.getItem('returnFlight')));
             setFlight(JSON.parse(sessionStorage.getItem('flight')));
             setTicketClass(sessionStorage.getItem('ticketClass'));
+            setNumberOfTravellers(sessionStorage.getItem('passNum'));
         } else{
             setFlight(JSON.parse(sessionStorage.getItem('flight')));
             setTicketClass(sessionStorage.getItem('ticketClass'));
+            setNumberOfTravellers(sessionStorage.getItem('passNum'));
         }
     }, [])
 
@@ -67,6 +91,14 @@ const TicketSelectionPage = () => {
         // console.log(flightTickets)
         // console.log(loading)
     }, [returnFlight, flight])
+
+    // useEffect(() => {
+    //     if(flight && returnFlight && flightTickets && returnTickets){
+    //         setLoading(false);
+    //     } else if( flight && flightTickets){
+    //         setLoading(false);
+    //     }
+    // }, [returnTickets, flightTickets])
 
     useEffect(() => {
         sessionStorage.setItem('ticket', JSON.stringify(selectedTicket));
@@ -102,7 +134,7 @@ const TicketSelectionPage = () => {
 
     const renderContent = () =>{
         // console.log(flightTickets)
-    if(!loading){   
+    if(!loading && flightTickets){   
          return[
             <>
                 <h2>Flight {flight.flightNumber} &emsp; <FaPlaneDeparture/> {flight.departureCode.airport}, {flight.departureCode.countryCode3.countryName} &emsp;
@@ -110,6 +142,7 @@ const TicketSelectionPage = () => {
                 <h3>Please select the desired ticket type for your flight</h3>
                 <ButtonToolbar size="lg" className="mb-4 d-flex justify-content-center">
                         { flightTickets.map((item, index) => {
+                            // console.log(item)
                             return(
                             <Card key = {index}>
                             <Card.Header as="h5">{item.ticketType.name}</Card.Header>
