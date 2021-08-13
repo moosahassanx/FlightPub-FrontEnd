@@ -355,6 +355,13 @@ const SearchForm = () => {
                     </form>
                 }
             </div>
+            <hr/>
+            {flightData.length > 0&&
+                <div className="container-fluid text-center">
+                    HELLO
+                </div>
+            }
+            <hr/>
             {search 
                 &&
                 <div className="container-fluid text-center">
