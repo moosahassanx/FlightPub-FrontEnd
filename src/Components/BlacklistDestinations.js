@@ -15,6 +15,11 @@ const BlackListDestinations = () => {
         .then(json => setDestinations(json))
     }
 
+    function destinationCodeInConsole(destCode)
+    {
+        console.log(destCode);
+    }
+
     // render the destinations
     function renderDestinations()
     {
@@ -32,25 +37,27 @@ const BlackListDestinations = () => {
                 {destinations.map((destination) => (
 
                     <div>
-                        <div className="full-name">
-                            <h3>{destination.airport}</h3>
-                        </div>
+                        <form>
+                            <div className="full-name">
+                                <h3>{destination.airport}</h3>
+                            </div>
 
-                        <div className="other-shit">
-                            <h5>Number of times booked: {destination.timesBooked}</h5>
-                            {
-                                destination.blacklisted == '1' ? (
-                                    <h5>Blacklisted: True</h5>
-                                )
-                                :
-                                <h5>Blacklisted: False</h5>
-                            }
+                            <div className="other-shit">
+                                <h5>Number of times booked: {destination.timesBooked}</h5>
+                                {
+                                    destination.covid == '1' ? (
+                                        <h5>Blacklisted: True</h5>
+                                    )
+                                    :
+                                    <h5>Blacklisted: False</h5>
+                                }
 
-                            <button>set blacklisted</button>
-                            <button>set unblacklisted</button>
+                                <button onClick={destinationCodeInConsole(destination.destinationCode)}>set blacklisted</button><br></br><br></br>
+                                <button >set unblacklisted</button>
 
-                            <hr></hr>
-                        </div>
+                                <hr></hr>
+                            </div>
+                        </form>
                     </div>
                     
                 ))}
