@@ -12,12 +12,17 @@ const SearchForm = () => {
     //trip type is set to One-Way by default and the dates are set to the current date
     const[tripType, setTripType] = useState('One-Way');
     const[destFrom, setDestFrom] = useState();
-
+    const [sort, setSort] = useState("non")
+    const[searchType, setSearchType] = useState("Fixed")
     const[numberOfTravellers, setnumberOfTravellers] = useState(1);
     const[tClass, setTclass] = useState('ECO');
     const[destTo, setDestTo] = useState();
     const [departureDate, setDepartureDate] = useState(new Date());
     const [arrDate, setArrDate] = useState(new Date());
+    const[depDateRange, setDepDateRange] = useState([null, null]);
+    const [depStartDate, depEndDate] = depDateRange;
+    const[reDateRange, setReDateRange] = useState([null, null]);
+    const [reStartDate, reEndDate] = reDateRange;
     const [flightData, setFlightData] = useState([]);
     const [returnFlights, setReturnFlights] = useState([]);
     //search is a boolean that is set to false to represent that there has not been a search performed, untill it is change on Submission
@@ -30,6 +35,110 @@ const SearchForm = () => {
     in1Years.setFullYear(in1Years.getFullYear() + 1);
 
     const[maxDates, setMaxDate] = useState(in1Years);
+
+    const sortFlights = (sort) =>{
+        if(sort === "price"){
+            if(flightData.length > 0){
+                flightData.sort((a, b) => {
+                    if(a.price > b.price){
+                        return 1;
+                    } else if(b.price > a.price){
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                })
+            }
+            if(returnFlights.length > 0){
+                returnFlights.sort((a, b) => {
+                    if(a.price > b.price){
+                        return 1;
+                    } else if(b.price > a.price){
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                })
+            }
+        } else if(sort === "duration"){
+            if(flightData.length > 0){
+                flightData.sort((a, b) => {
+                    if((a.duration + a.durationSecondLeg) > (b.duration + b.durationSecondLeg)){
+                        return 1;
+                    } else if((b.duration + b.durationSecondLeg) > (a.duration + a.durationSecondLeg)){
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                })
+            }
+            if(returnFlights.length > 0){
+                returnFlights.sort((a, b) => {
+                    if((a.duration + a.durationSecondLeg) > (b.duration + b.durationSecondLeg)){
+                        return 1;
+                    } else if((b.duration + b.durationSecondLeg) > (a.duration + a.durationSecondLeg)){
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                })
+            }
+        } else if(sort === "deptEarly"){
+            if(flightData.length > 0){
+                flightData.sort((a, b) => {
+                    let d1 = new Date(a.departureTime).toLocaleString()
+                    let d2 = new Date(b.departureTime).toLocaleString()
+                    if(d1 > d2){
+                        return 1;
+                    } else if(d2 > d1){
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                })
+            }
+            if(returnFlights.length > 0){
+                returnFlights.sort((a, b) => {
+                    let d1 = new Date(a.departureTime).toLocaleString()
+                    let d2 = new Date(b.departureTime).toLocaleString()
+                    if(d1 > d2){
+                        return 1;
+                    } else if(d2 > d1){
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                })
+            }
+        } else if(sort === "deptLate"){
+            if(flightData.length > 0){
+                flightData.sort((a, b) => {
+                    let d1 = new Date(a.departureTime).toLocaleTimeString()
+                    let d2 = new Date(b.departureTime).toLocaleTimeString()
+                    if(d1 > d2){
+                        return -1;
+                    } else if(d2 > d1){
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                })
+            }
+            if(returnFlights.length > 0){
+                returnFlights.sort((a, b) => {
+                    let d1 = new Date(a.departureTime).toLocaleTimeString()
+                    let d2 = new Date(b.departureTime).toLocaleTimeString()
+                    if(d1 > d2){
+                        return -1;
+                    } else if(d2 > d1){
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                })
+            }
+        }
+    }
     //Parameter change handlers
     const handleTripType = (event) =>{
         setTripType(event.target.value);
@@ -41,11 +150,22 @@ const SearchForm = () => {
         setDestTo(data.value);
     }
     const handleDepDate = (date) =>{
-        setDepartureDate(date);
+        if(searchType === 'Flexible'){
+            setDepDateRange(date)
+        } else {
+            setDepartureDate(date);
+        }
     }
     const handleArrDate = (date) =>{
-        setArrDate(date);
-        setMaxDate(date);
+        if(searchType === 'Flexible'){
+            setReDateRange(date)
+            if(date[1]){
+                setMaxDate(date[1])
+            }
+        } else {
+            setArrDate(date);
+            setMaxDate(date);
+        }
     }
     
     const handleNumberOfTravellers = (event) =>{
@@ -53,6 +173,15 @@ const SearchForm = () => {
     }
     const handleTicketClass = (event) =>{
         setTclass(event.target.value);
+    }
+
+    const handleSort = (event) =>{
+        setSort(event.target.value);
+        sortFlights(event.target.value);
+    }
+
+    const handleSearchType = (event) =>{
+        setSearchType(event.target.value);
     }
 
     async function getPrice(num, date){
@@ -136,20 +265,29 @@ const SearchForm = () => {
             alert("The travel destinations must be different please try again");
             error = true;
         }
-        if(tripType === 'Return' && departureDate.getTime() === arrDate.getTime())
+        if(tripType === 'Return' && departureDate.getTime() === arrDate.getTime() && searchType != 'Flexible')
         {
             alert("The return date cannot be the same as the departure date");
             error = true;
         }
         if(tripType === 'One-Way' && !error)
         {
-            url += `getflights?from=${destFrom}&to=${destTo}&dep=${departureDate.toJSON()}`;
+            if(searchType === 'Flexible'){
+                url += `getFlexFlights?from=${destFrom}&to=${destTo}&dep1=${depStartDate.toJSON()}&dep2=${depEndDate.toJSON()}`;
+            } else{
+                url += `getflights?from=${destFrom}&to=${destTo}&dep=${departureDate.toJSON()}`;
+            }
             getFlightData(url , urlRe);
         }
         if(tripType === 'Return' && !error)
         {
-            url += `getflights?from=${destFrom}&to=${destTo}&dep=${departureDate.toJSON()}`;
-            urlRe += `getflights?from=${destTo}&to=${destFrom}&dep=${arrDate.toJSON()}`;
+            if(searchType === 'Flexible'){
+                url += `getFlexFlights?from=${destFrom}&to=${destTo}&dep1=${depStartDate.toJSON()}&dep2=${depEndDate.toJSON()}`;
+                urlRe += `getFlexFlights?from=${destTo}&to=${destFrom}&dep1=${reStartDate.toJSON()}&dep2=${reEndDate.toJSON()}`;
+            } else{
+                url += `getflights?from=${destFrom}&to=${destTo}&dep=${departureDate.toJSON()}`;
+                urlRe += `getflights?from=${destTo}&to=${destFrom}&dep=${arrDate.toJSON()}`;
+            }
             getFlightData(url , urlRe);
         }
         
@@ -180,6 +318,12 @@ const SearchForm = () => {
                         <select value={tripType} onChange={handleTripType}>
                             <option value="One-Way">One-Way</option>
                             <option value="Return">Return</option>
+                        </select>
+                        &emsp;
+                    Dates:&emsp;
+                        <select value={searchType} onChange={handleSearchType}>
+                            <option value="Fixed">Fixed</option>
+                            <option value="Flexible">Flexible</option>
                         </select>
                     </div>
                     <div className="dropdown">
@@ -247,13 +391,27 @@ const SearchForm = () => {
                     </div>
                     <div>
                         <p>Departing</p>
-                        <DatePicker 
-                        selected={departureDate}
-                        minDate={minDate}
-                        maxDate={maxDates}
-                        dateFormat="dd/MM/yyyy"
-                        onChange={handleDepDate}
-                        />
+                        {searchType === 'Flexible'?
+                            <DatePicker 
+                                selectsRange={true}
+                                minDate={minDate}
+                                maxDate={maxDates}
+                                startDate={depStartDate}
+                                endDate={depEndDate}
+                                dateFormat="dd/MM/yyyy"
+                                onChange={handleDepDate}
+                                withPortal
+                            />
+                            :
+                            <DatePicker 
+                                selected={departureDate}
+                                minDate={minDate}
+                                maxDate={maxDates}
+                                dateFormat="dd/MM/yyyy"
+                                onChange={handleDepDate}
+                                withPortal
+                            />
+                         }
                     </div>
                     <br/>
                     <input type="submit" value="Search Flights" className="btn btn-secondary btn-lg"/>
@@ -265,6 +423,12 @@ const SearchForm = () => {
                         <select value={tripType} onChange={handleTripType}>
                             <option value="One-Way">One-Way</option>
                             <option value="Return">Return</option>
+                        </select>
+                        &emsp;
+                        Dates:&emsp;
+                        <select value={searchType} onChange={handleSearchType}>
+                            <option value="Fixed">Fixed</option>
+                            <option value="Flexible">Flexible</option>
                         </select>
                         </div>
                         <div>
@@ -332,36 +496,72 @@ const SearchForm = () => {
                     </div>
                         <div>
                             <p>Departing</p>
+                            {searchType === 'Flexible'?
                             <DatePicker 
-                            selected={departureDate}
-                            minDate={minDate}
-                            maxDate={maxDates}
-                            dateFormat="dd/MM/yyyy"
-                            onChange={handleDepDate}
+                                selectsRange={true}
+                                minDate={minDate}
+                                maxDate={maxDates}
+                                startDate={depStartDate}
+                                endDate={depEndDate}
+                                dateFormat="dd/MM/yyyy"
+                                onChange={handleDepDate}
+                                withPortal
                             />
+                            :
+                            <DatePicker 
+                                selected={departureDate}
+                                minDate={minDate}
+                                maxDate={maxDates}
+                                dateFormat="dd/MM/yyyy"
+                                onChange={handleDepDate}
+                                withPortal
+                            />
+                         }
                         </div>
                         <div>
                             <p>Returning</p>
+                            {searchType === 'Flexible'?
                             <DatePicker 
-                            selected={arrDate}
-                            minDate={departureDate}
-                            maxDate={in1Years}
-                            dateFormat="dd/MM/yyyy"
-                            onChange={handleArrDate}
+                                selectsRange={true}
+                                minDate={minDate}
+                                maxDate={in1Years}
+                                startDate={reStartDate}
+                                endDate={reEndDate}
+                                dateFormat="dd/MM/yyyy"
+                                onChange={handleArrDate}
+                                withPortal
                             />
+                            :
+                            <DatePicker 
+                                selected={arrDate}
+                                minDate={departureDate}
+                                maxDate={in1Years}
+                                dateFormat="dd/MM/yyyy"
+                                onChange={handleArrDate}
+                                withPortal
+                            />
+                        }
                         </div>
                         <br/>
                         <input type="submit" value="Search Flights" className="btn btn-secondary btn-lg"/>
                     </form>
                 }
             </div>
-            <hr/>
-            {flightData.length > 0&&
+            
+            {flightData.length > 0 &&
                 <div className="container-fluid text-center">
-                    HELLO
+                    <hr/>
+                    Sort by:&emsp;
+                    <select value={sort} onChange={handleSort}>
+                            <option value="non">Non</option>
+                            <option value="price">Lowest price</option>
+                            <option value="deptEarly">Earliest departure</option>
+                            <option value="deptLate">Latest departure</option>
+                            <option value="duration">Shortest duration</option>
+                        </select>
+                    <hr/>
                 </div>
             }
-            <hr/>
             {search 
                 &&
                 <div className="container-fluid text-center">

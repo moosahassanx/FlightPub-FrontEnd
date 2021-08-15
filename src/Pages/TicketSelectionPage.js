@@ -24,11 +24,8 @@ const TicketSelectionPage = () => {
       );
 
     async function getTicketData(flightInfo){
-        console.log(flightInfo.ticketType.ticketCode)
-        console.log(flightInfo.flightNumber + ticketClass)
         let d = new Date(flightInfo.departureTime)
         let url = `http://localhost:8080/getticketprice?fnum=${flightInfo.flightNumber}&tCode=${flightInfo.ticketType.ticketCode}&tclass=${ticketClass}&depdate=${d.toISOString()}`
-        console.log(url)
         return await fetch(url)
         .then(response => response.json())   
     }
@@ -44,9 +41,7 @@ const TicketSelectionPage = () => {
         if(num === 1){
             getFlightAvailblity(flight).then(data =>{
                 Promise.all(data.map(flight =>{
-                    console.log(flight)
                     getTicketData(flight).then(data =>{
-                        // console.log(data)
                         setFlightTickets(old => [...old, data]);
                     })
                 }));
@@ -87,9 +82,6 @@ const TicketSelectionPage = () => {
         } else if (flight && !returnFlight) {
             getTickets(1).then(setLoading(false));
         }
-        // console.log(returnFlight)
-        // console.log(flightTickets)
-        // console.log(loading)
     }, [returnFlight, flight])
 
     // useEffect(() => {
@@ -127,13 +119,11 @@ const TicketSelectionPage = () => {
     }
 
     function createBookButton(isReturn, ticket) {
-        // console.log(selectedFlight);
         return (isReturn ? <ToggleButton type="checkbox" variant="outline-dark" onClick={(e) => handleReSelectedticket(ticket, e)} checked={selectedReTicket ? ticket===selectedReTicket : false}> Select Return Ticket</ToggleButton> 
         : <ToggleButton type="checkbox" variant="outline-dark" onClick={(e) => handleSelectedTicket(ticket, e)} checked={selectedTicket ? ticket===selectedTicket : false}> Select Ticket</ToggleButton>);
     }
 
     const renderContent = () =>{
-        // console.log(flightTickets)
     if(!loading && flightTickets){   
          return[
             <>
@@ -142,7 +132,6 @@ const TicketSelectionPage = () => {
                 <h3>Please select the desired ticket type for your flight</h3>
                 <ButtonToolbar size="lg" className="mb-4 d-flex justify-content-center">
                         { flightTickets.map((item, index) => {
-                            // console.log(item)
                             return(
                             <Card key = {index}>
                             <Card.Header as="h5">{item.ticketType.name}</Card.Header>
