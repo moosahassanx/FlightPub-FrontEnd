@@ -1,8 +1,9 @@
 // imports
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import '../Css/Discovery.css'
-import '../Images/city-adelaide.jpg'
+import adelaide from '../Images/city-adelaide.jpg'
 import Spinner from 'react-bootstrap/Spinner'
+
 
 const Discovery = () => {
 
@@ -12,9 +13,23 @@ const Discovery = () => {
     const [loading, setLoading] = useState(false);
     
     const [covid, setCovidFlag] = useState(false);
-    const [userHistoryList, setUserHistoryList] = useState(null);
+    const [uName, setUName] = useState(() => {
+        const initial = JSON.parse(localStorage.getItem('user-login-name'));
+        return initial;
+    });
+    const [userHistoryList, setUserHistoryList] = useState([]);
 
     // tag states
+
+    const [africa, setAfricaFlag] = useState(false);
+    const [asia, setAsiaFlag] = useState(false);
+    const [europe, setEuropeFlag] = useState(false);
+    const [namerica, setNAmericaFlag] = useState(false);
+    const [samerica, setSAmericaFlag] = useState(false);
+    const [middleEast, setMiddleEastFlag] = useState(false);
+    const [mediterranean, setMediterraneanFlag] = useState(false);
+    const [oceania, setOceaniaFlag] = useState(false);
+
     const [beach, setBeachFlag] = useState(false);
     const [alps, setAlpsFlag] = useState(false);
     const [rainforest, setRainforestFlag] = useState(false);
@@ -58,6 +73,15 @@ const Discovery = () => {
     }*/
 
     function toggleCovid() { setCovidFlag(!covid); }
+
+    function toggleAfricaFlag() { setAfricaFlag(!africa); }
+    function toggleAsiaFlag() { setAsiaFlag(!asia); }
+    function toggleEuropeFlag() { setEuropeFlag(!europe); }
+    function toggleNAmericaFlag() { setNAmericaFlag(!namerica); }
+    function toggleSAmericaFlag() { setSAmericaFlag(!samerica); }
+    function toggleMiddleEastFlag() { setMiddleEastFlag(!middleEast)}
+    function toggleMediterraneanFlag() { setMediterraneanFlag(!mediterranean); }
+    function toggleOceaniaFlag() { setOceaniaFlag(!oceania); }
     
     function toggleBeachFlag() { setBeachFlag(!beach); }
     function toggleAlpsFlag() { setAlpsFlag(!alps); }
@@ -84,6 +108,24 @@ const Discovery = () => {
     function getTags()
     {
         let tags = []
+
+        if(africa)
+            tags.push('africa');
+        if(asia)
+            tags.push('asia');
+        if(europe)
+            tags.push('europe');
+        if(namerica)
+            tags.push('africa');
+        if(samerica)
+            tags.push('samerica');
+        if(middleEast)
+            tags.push('middleEast');
+        if(mediterranean)
+            tags.push('mediterranean');
+        if(oceania)
+            tags.push('oceania');
+
 
         if(beach)
             tags.push('beach');
@@ -129,27 +171,45 @@ const Discovery = () => {
         return tags.toString();
     }
 
-    function getHistoryList()
-    {
-        getHistoryRecommendations();
-    }
+    useEffect(() => {
+        getHistoryList()
+    }, [])
 
-    async function getHistoryRecommendations()
+    async function getHistoryList()
     {
         let top3 = [];
+        
 
-        var userName = JSON.parse(localStorage.getItem('user-login-name'));
-        console.log(userName);
+        const doThing = async () => {
+            const response = await fetch('http://localhost:8080/getTop3Destinations')
+            const json = await response.json();
+            console.log(json);
+        }
 
-        await fetch('http://localhost:8080/getUserHistory?userName=' + userName[0])
-        .then(response => response.json())
-        .then(json => json.forEach(element =>
-        {
-            //top3.push(element);
-            top3.push(element.flight.destinationCode.airport);
-        }))
+        doThing();
 
-        setUserHistoryList(top3);
+        const fetchData = async () => {
+            const response = await fetch('http://localhost:8080/getUserHistory?userName=' + uName)
+            const json = await response.json();
+
+            json.forEach(e => top3.push(
+                <td>
+                    <label className="history-flight-data">
+                        <img className="history-flight-img" src={adelaide} width="100" height="100"/>
+                        <div className="history-flight-text">
+                            <p>From: {e.flight.departureCode.airport.toString()}</p>
+                            <p>To: {e.flight.destinationCode.airport.toString()}</p>
+                        </div>
+                        <div className="flight-history-button">
+                            <button className="bookButton">Book Now!</button>
+                        </div>
+                    </label>
+                </td>
+            ));
+            setUserHistoryList(await top3)
+        }
+
+        fetchData();
 
         return top3;
     }
@@ -182,7 +242,21 @@ const Discovery = () => {
                         if(i == j)
                         {
                             // add tag to display list
-                            taggedDestinations.push(' ' + element.airport);
+                            taggedDestinations.push(
+                                <tr>
+                                    <label className="history-flight-data">
+                                        <img className="history-flight-img" src={adelaide} width="100" height="100"/>
+                                        <div className="history-flight-text">
+                                            <h4>{element.airport.toString()}</h4>
+                                            <p>{element.countryCode3.countryName.toString()}</p>
+                                        </div>
+                                        <div className="flight-history-button">
+                                            <button className="bookButton">Book Now!</button>
+                                        </div>
+                                    </label>
+                                </tr>
+                            );
+                            console.log(element);
                         }
                     });
                 });
@@ -205,7 +279,21 @@ const Discovery = () => {
                         if(i == j)
                         {
                             // add tag to display list
-                            taggedDestinations.push(' ' + element.airport);
+                            taggedDestinations.push(
+                                <tr>
+                                    <label className="history-flight-data">
+                                        <img className="history-flight-img" src={adelaide} width="100" height="100"/>
+                                        <div className="history-flight-text">
+                                            <h4>{element.airport.toString()}</h4>
+                                            <p>{element.countryCode3.countryName.toString()}</p>
+                                        </div>
+                                        <div className="flight-history-button">
+                                            <button className="bookButton">Book Now!</button>
+                                        </div>
+                                    </label>
+                                </tr>
+                            );
+                            console.log(element);
                         }
                     });
                 });
@@ -213,7 +301,8 @@ const Discovery = () => {
         }
 
         // set display list for rendering
-        setListTagged(taggedDestinations.toString());
+        //setListTagged(taggedDestinations.toString());
+        setListTagged(taggedDestinations);
 
         // stop loading spinner
         var currentTime = new Date().getTime();
@@ -226,13 +315,79 @@ const Discovery = () => {
     return (
         <div className="discovery-div">
             <h1>Revisit</h1>
+            <p>How about revisiting one of your previous destinations?</p>
 
-            <button className="discovery-button" onClick={getHistoryList}>Get User History</button>
-            <p>{userHistoryList}</p>
+            {
+                <table className="history-flight-table">
+                    {
+                        userHistoryList == null || userHistoryList == '' ? (
+                            <p>Unable to get user history list.</p>
+                        ) : (
+                            <tr>{userHistoryList}</tr>
+                        )
+                    }
+                </table>
+            }
 
             <h1>Discovery</h1>
 
-            <p>Select any images that appeal to you.</p>
+            <p></p>
+
+            <h3>Destination</h3>
+            <table className='discovery-text-table'>
+                <tr>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleAfricaFlag}>Africa</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleAsiaFlag}>Asia</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleEuropeFlag}>Europe</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleNAmericaFlag}>North America</span>
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleSAmericaFlag}>South America</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleMediterraneanFlag}>Mediterranean</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleMiddleEastFlag}>Middle East</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label className="discovery-text-switch">
+                            <input type="checkbox"/>
+                            <span className="discovery-text-slider" onClick={toggleOceaniaFlag}>Oceania</span>
+                        </label>
+                    </td>
+                </tr>
+            </table>
 
             <h3>Geography</h3>
             <table className='discovery-text-table'>
@@ -265,7 +420,6 @@ const Discovery = () => {
             </table>
 
             <h3>Entertainment</h3>
-
             <table className='discovery-text-table'>
                 <tr>
                     <td>
@@ -374,6 +528,9 @@ const Discovery = () => {
             </table>
 
             {/* list of images for user to select }
+
+            <p>Select any images that appeal to you.</p>
+
             <table className='discovery-table'>
                 <tr>
                     <td>
@@ -536,7 +693,7 @@ const Discovery = () => {
                             <p>Click your favourite images and click "Discover".</p>
                         ) : (
                             // display discovery list
-                            <p><strong>List of destinations calculated:</strong> {listTagged}</p>
+                            <table className="history-flight-table">{listTagged}</table>
                         )}
                     </div>
                 )

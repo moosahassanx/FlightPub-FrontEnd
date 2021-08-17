@@ -274,3 +274,54 @@ input:checked + .discovery-covid-slider:before
 {
     border-radius: 50%;
 }
+
+/*********************************************************************************/
+
+.history-flight-table
+{
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    /*border: 1px solid black;*/
+}
+
+.history-flight-data
+{
+    background-color:lightskyblue;
+    padding: 5px;
+    text-align: center;
+}
+
+.history-flight-text
+{
+    font-variant: small-caps;
+
+    height: 50px;
+    width: 300px;
+    margin: left;
+    text-align: left;
+    /*border: 1px solid black;*/
+}
+
+.history-flight-img
+{
+    float: right;
+}
+
+.flight-history-button
+{
+    padding: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.bookButton
+{
+    width:150px;
+    height: 40px;
+    border: none;
+    background-color: white;
+    font-size: large;
+    font-variant: small-caps;
+}
