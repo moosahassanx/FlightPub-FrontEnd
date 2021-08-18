@@ -177,6 +177,9 @@ const Discovery = () => {
 
     async function getHistoryList()
     {
+        if(uName == null)
+            return;
+        
         let top3 = [];
         
 
