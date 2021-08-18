@@ -1,0 +1,100 @@
+#info1{
+    text-align: left;
+    padding: 2%;
+}
+
+#info2{
+    text-align: right;
+    padding: 2%;
+}
+
+#centre{
+    text-align: center;
+    padding: 2%;
+}
+
+#solo{
+    background-image: url('../Images/HolidayPackages/Solo-traveller.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 257px;
+    width: 375px;
+    padding: 1%;
+}
+
+#solo > a {
+    
+    padding: 5%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+#family{
+    background-image: url('../Images/HolidayPackages/family-holiday.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 257px;
+    width: 375px;
+    padding: 1%;
+}
+
+#family > a {
+    padding: 5%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+#senior{
+    background-image: url('../Images/HolidayPackages/senior-holiday.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 257px;
+    width: 375px;
+    padding: 1%;
+}
+
+#senior > a {
+    padding: 5%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+#business{
+    background-image: url('../Images/HolidayPackages/business-traveller.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 257px;
+    width: 375px;
+    padding: 1%;
+}
+
+#business > a {
+    padding: 5%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.a:link { 
+    color: white;
+    font-size: x-large;
+ }
+.a:visited { 
+    color: white;
+    font-size: x-large;
+ }
+.a:hover { 
+    color: white;
+    font-size: x-large;
+ }
+.a:active { 
+    color: white;
+    font-size: x-large;
+ }
+.a:focus { 
+    color: white;
+    font-size: x-large;
+ }
