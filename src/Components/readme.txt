@@ -1,1 +1,0 @@
-// JPA repo interfaces to extend for database calls
