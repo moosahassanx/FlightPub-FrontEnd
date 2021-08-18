@@ -6,6 +6,11 @@ import Groups from './Groups';
 import Business from './Business';
 import AccountManagement from './AccountManagement';
 import Discovery from './Discovery';
+import BookingPage from './BookingPage';
+import TicketSelectionPage from './TicketSelectionPage';
+import PaymentPage from './PaymentPage';
+import ConfirmPage from './ConfirmPage';
+import HolidayPackages from './HolidayPackages';
 
 export {
     Home,
@@ -14,4 +19,9 @@ export {
     Business,
     AccountManagement,
     Discovery,
+    BookingPage,
+    TicketSelectionPage,
+    PaymentPage,
+    ConfirmPage,
+    HolidayPackages
 }
