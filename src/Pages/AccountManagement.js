@@ -3,6 +3,7 @@ import {useState, useEffect} from 'react'
 import '../Css/AccountManagement.css'
 import * as Icon from 'react-bootstrap-icons';
 import { useHistory } from "react-router-dom";
+import Bookings from '../Components/Bookings'
 
 const AccountManagement = () => {
 
@@ -305,18 +306,7 @@ const AccountManagement = () => {
 
                                 <div className='account-detail-parent'>
                                     {/* setting LHS for details */}
-                                    <div className='account-detail-left'>
-                                        <p>Flight number: </p>
-                                        <p>Departure: </p>
-                                        <p>Arrival: </p>
-                                    </div>
-
-                                    {/* retrieving and rendering details */}
-                                    <div className='account-detail-right'>
-                                        <p>PLACEHOLDER TEXT </p>
-                                        <p>PLACEHOLDER TEXT </p>
-                                        <p>PLACEHOLDER TEXT </p>
-                                    </div>
+                                    <Bookings />
                                 </div>
                             </div>
                         ) : null

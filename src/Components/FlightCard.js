@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Card, ButtonGroup, Button, ToggleButton } from 'react-bootstrap';
+import { Card, ButtonGroup, Button, ToggleButton, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { FaPlaneDeparture, FaPlaneArrival } from 'react-icons/fa';
-import { getDate } from '../Util/GetDate';
+import {BsFillInfoCircleFill} from 'react-icons/bs'
+
 
 
 //this component is to be extended with booking, and also a filter and sort options are also to be implemented
@@ -16,7 +17,11 @@ const FlightCard = (props) => {
 
     const [selectedFlight, setSelectedFlight] = useState();
     const [selectedRetuenFlight, setSelectedRetuenFlight] = useState();
-    
+    const popover = (props) => (
+        <Tooltip id="button-tooltip" {...props}>
+            You’re seeing this ad based on the flight’s relevance to your search query.
+        </Tooltip>
+      );
     useEffect(() => {
         setSelectedFlight();
         setSelectedRetuenFlight();
@@ -74,8 +79,8 @@ const FlightCard = (props) => {
     }
     
     function createBookButton(isReturn, flight) {
-        // console.log(selectedFlight);
-        return (isReturn ? <ToggleButton type="checkbox" variant="outline-dark" onClick={(e) => handleSReturnSlectedFlight(flight, e)} checked={selectedRetuenFlight ? flight===selectedRetuenFlight : false}> Select Return Flight</ToggleButton> : <ToggleButton type="checkbox" variant="outline-dark" onClick={(e) => handleSelectedFlight(flight, e)} checked={selectedFlight ? flight===selectedFlight : false}> Select Flight</ToggleButton>);
+        return (isReturn ? <ToggleButton type="checkbox" variant="outline-dark" onClick={(e) => handleSReturnSlectedFlight(flight, e)} checked={selectedRetuenFlight ? flight===selectedRetuenFlight : false}> Select Return Flight</ToggleButton>
+         : <ToggleButton type="checkbox" variant="outline-dark" onClick={(e) => handleSelectedFlight(flight, e)} checked={selectedFlight ? flight===selectedFlight : false}> Select Flight</ToggleButton>);
     }
 
     // function isLoading(){
@@ -90,25 +95,37 @@ const FlightCard = (props) => {
     //this will map the flightData object array into cards and display the needed information for each flight found
     const renderFlight = (data, isReturn) =>{
         var flightData = data;
-        console.log(data)
         return[
             <>
-            <ButtonGroup size="lg" className="mb-4">
+            <ButtonGroup size="lg" className="mb-4 d-flex flex-column">
                 { flightData.map((item, index) => {
                    return(
                    <Card key = {index}>
-                    <Card.Header as="h5">{item.airlineCode.airlineName}&emsp;Flight {item.flightNumber}</Card.Header>
+                    <Card.Header as="h5">{item.airlineCode.airlineName}&emsp;Flight {item.flightNumber} <br/>
+                       {item.airlineCode.sponsored === 1&& 
+                       <OverlayTrigger
+                            placement="top"
+                            delay={{ show: 250, hide: 400 }}
+                            overlay={popover}
+                        >
+                            <div className='float-right font-weight-light' 
+                                style={{cursor: "pointer", ':hover':{background:'orange'}}}>
+                                Sponsored <BsFillInfoCircleFill/>
+                            </div>
+                        </OverlayTrigger>
+                        }
+                        </Card.Header>
                     <Card.Body>
                       <Card.Title><FaPlaneDeparture/> {item.departureCode.destinationCode}, {item.departureCode.countryCode3.countryName}
                        &emsp;&emsp;&emsp;<FaPlaneArrival/> {item.destinationCode.destinationCode}, {item.destinationCode.countryCode3.countryName} </Card.Title>
                       <Card.Text>
                         Departure Date: {formatDate(item.departureTime)}&emsp;&emsp;&emsp;Arrival Date: {formatDate(item.arrivalTime)}<br/>    
                         Departure Time: {getTime(item.departureTime)}&emsp;&emsp;&emsp;Arrival Time {getTime(item.arrivalTime)} <br/>
-                        <b>{item.stopOverCode? 'Stop over location: '+ item.stopOverCode.airport + ', ' + item.stopOverCode.countryCode3.countryName:''}</b><br/>
-                        {item.stopOverCode? 'Arrival date stop over: '+ formatDate(item.arrivalTimeStopOver):''}&emsp;&emsp;&emsp;
-                        {item.stopOverCode? 'Departure date stop over: '+ formatDate(item.departureTimeStopOver):''}<br/>
-                        {item.stopOverCode? 'Arrival time stop over: '+ getTime(item.arrivalTimeStopOver):''}&emsp;&emsp;&emsp;
-                        {item.stopOverCode? 'Departure time stop over: '+ getTime(item.departureTimeStopOver):''}<br/>
+                        <b>{item.stopOverCode&& 'Stop over location: '+ item.stopOverCode.airport + ', ' + item.stopOverCode.countryCode3.countryName}</b><br/>
+                        {item.stopOverCode&& 'Arrival date stop over: '+ formatDate(item.arrivalTimeStopOver)}&emsp;&emsp;&emsp;
+                        {item.stopOverCode&& 'Departure date stop over: '+ formatDate(item.departureTimeStopOver)}<br/>
+                        {item.stopOverCode&& 'Arrival time stop over: '+ getTime(item.arrivalTimeStopOver)}&emsp;&emsp;&emsp;
+                        {item.stopOverCode&& 'Departure time stop over: '+ getTime(item.departureTimeStopOver)}<br/>
                         Duration: {timeConvert(item.duration + item.durationSecondLeg)}<br/>
                         Plane type: {item.planeType.details} <br/>
                         Price from ${item.price}
@@ -191,14 +208,14 @@ const FlightCard = (props) => {
     }
     //displays text and then calls the function renderContent to decide what to render to the user based on the search results
     return(
-        <>
+        <div className="container-fluid text-center">
 
             <h1>Search Results</h1>    
             {renderContent()}<br/>
             <Button variant="primary"  onClick={event =>  window.location.href='/TicketSelectionPage'} disabled={!selectedFlight && !selectedRetuenFlight} >
                  Continue to Booking
             </Button>
-        </>
+        </div>
     )
 }
 

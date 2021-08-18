@@ -8,6 +8,7 @@ const TicketSelectionPage = () => {
     const [flight, setFlight] = useState();
     const [returnFlight, setReturnFlight] = useState();
     const [ticketClass, setTicketClass] = useState();
+    const [numberOfTravellers, setNumberOfTravellers] = useState();
     const [flightTickets, setFlightTickets] = useState([]);
     const [returnTickets, setReturnTickets] = useState([]);
     const [selectedTicket, setSelectedTicket] = useState();
@@ -24,18 +25,34 @@ const TicketSelectionPage = () => {
 
     async function getTicketData(flightInfo){
         let d = new Date(flightInfo.departureTime)
-        let url = `http://localhost:8080/getticketprice?fnum=${flightInfo.flightNumber}&tclass=${ticketClass}&depdate=${d.toISOString()}`
+        let url = `http://localhost:8080/getticketprice?fnum=${flightInfo.flightNumber}&tCode=${flightInfo.ticketType.ticketCode}&tclass=${ticketClass}&depdate=${d.toISOString()}`
         return await fetch(url)
         .then(response => response.json())   
     }
+
+    async function getFlightAvailblity(flight){
+        let d = new Date(flight.departureTime)
+        var url = `http://localhost:8080/getAvailability?depTime=${d.toJSON()}&flightNum=${flight.flightNumber}&depSeats=${numberOfTravellers}&class=${ticketClass}`;
+        return await fetch(url)
+           .then(response => response.json())   
+    }
+
     async function getTickets(num){
         if(num === 1){
-            getTicketData(flight).then(data =>{
-                setFlightTickets(data);
+            getFlightAvailblity(flight).then(data =>{
+                Promise.all(data.map(flight =>{
+                    getTicketData(flight).then(data =>{
+                        setFlightTickets(old => [...old, data]);
+                    })
+                }));
             })
         } else{
-            getTicketData(returnFlight).then(data => {
-                setReturnTickets(data)
+            getFlightAvailblity(returnFlight).then(data =>{
+                Promise.all(data.map(flight =>{
+                    getTicketData(flight).then(data =>{
+                        setReturnTickets(old => [...old, data]);
+                    })
+                }));
             })
         }
     }
@@ -50,9 +67,11 @@ const TicketSelectionPage = () => {
             setReturnFlight(JSON.parse(sessionStorage.getItem('returnFlight')));
             setFlight(JSON.parse(sessionStorage.getItem('flight')));
             setTicketClass(sessionStorage.getItem('ticketClass'));
+            setNumberOfTravellers(sessionStorage.getItem('passNum'));
         } else{
             setFlight(JSON.parse(sessionStorage.getItem('flight')));
             setTicketClass(sessionStorage.getItem('ticketClass'));
+            setNumberOfTravellers(sessionStorage.getItem('passNum'));
         }
     }, [])
 
@@ -63,10 +82,15 @@ const TicketSelectionPage = () => {
         } else if (flight && !returnFlight) {
             getTickets(1).then(setLoading(false));
         }
-        // console.log(returnFlight)
-        // console.log(flightTickets)
-        // console.log(loading)
     }, [returnFlight, flight])
+
+    // useEffect(() => {
+    //     if(flight && returnFlight && flightTickets && returnTickets){
+    //         setLoading(false);
+    //     } else if( flight && flightTickets){
+    //         setLoading(false);
+    //     }
+    // }, [returnTickets, flightTickets])
 
     useEffect(() => {
         sessionStorage.setItem('ticket', JSON.stringify(selectedTicket));
@@ -95,14 +119,12 @@ const TicketSelectionPage = () => {
     }
 
     function createBookButton(isReturn, ticket) {
-        // console.log(selectedFlight);
         return (isReturn ? <ToggleButton type="checkbox" variant="outline-dark" onClick={(e) => handleReSelectedticket(ticket, e)} checked={selectedReTicket ? ticket===selectedReTicket : false}> Select Return Ticket</ToggleButton> 
         : <ToggleButton type="checkbox" variant="outline-dark" onClick={(e) => handleSelectedTicket(ticket, e)} checked={selectedTicket ? ticket===selectedTicket : false}> Select Ticket</ToggleButton>);
     }
 
     const renderContent = () =>{
-        // console.log(flightTickets)
-    if(!loading){   
+    if(!loading && flightTickets){   
          return[
             <>
                 <h2>Flight {flight.flightNumber} &emsp; <FaPlaneDeparture/> {flight.departureCode.airport}, {flight.departureCode.countryCode3.countryName} &emsp;

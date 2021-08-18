@@ -125,9 +125,9 @@ const Groups = () => {
                     <GoogleMap
                         mapContainerStyle={containerStyle}
                         zoom={2}
-                        center={center}>       
-
-                                <Marker key="wefwef" position={{lat: 34, lng: 123}}   />     
+                        center={center}       
+                        key="AIzaSyDE4QqTEwYOVTFexogb-Aj7KWkex3ize4A">
+                                <Marker key="AIzaSyDE4QqTEwYOVTFexogb-Aj7KWkex3ize4A" position={{lat: 34, lng: 123}}   />     
 
                     </GoogleMap>
                 </div>
