@@ -1,0 +1,182 @@
+.container{
+    justify-content: center;
+  }
+  
+  .account-buttons{
+    margin: 10px;
+  }
+  
+  .text-left{
+    width:20%;
+  }
+  
+  #accountmng-col {
+    background: lightgrey;
+    border: 1px solid grey;
+    padding: 0 0 0 0;
+  }
+  
+  #accountmng-content-col
+  {
+    padding: 0 0 0 0;
+  }
+  
+  .col-md-9{
+    background: #E0E0E0;
+    border: 1px solid grey;
+    height: 500px;
+  }
+  
+  #accountmng-row{
+    margin-left: 2vh;
+    margin-right: 2vh;
+  }
+  
+  .left-panel-header
+  {
+    background-color: #3F51B5;
+    width: 100%;
+    height: 50px;
+    color: white;
+    text-align: left;
+    padding-left: 30px;
+    padding-top: 15px;
+    border: 0;
+  }
+  
+  .right-panel-header
+  {
+    background-color: #37479F;
+    width: 100%;
+    height: 50px;
+    color: white;
+    padding-top: 10px;
+    border: 0;
+  }
+  
+  .btn-group-vertical
+  {
+    width: 100%;
+  }
+  
+  .controller-button
+  {
+    width: 100%;
+    height: 40px;
+    text-align: left;
+    padding-left: 20px;
+    background-color: white;
+    border: 0;
+    transition: 0.1s;
+  }
+  
+  .controller-button:hover
+  {
+    background-color: rgb(231, 231, 231);
+    transition: 0.1s;
+  }
+  
+  .icon-spacer
+  {
+    padding-left: 10px;
+  }
+  
+  #myDetails:focus
+  {
+    background-color: #37b360;
+    color: white;
+  }
+  #changePassword:focus
+  {
+    background-color: #37b360;
+    color: white;
+  }
+  
+  #viewBookings:focus
+  {
+    background-color: #37b360;
+    color: white;
+  }
+  
+  .account-detail-left
+  {
+    width: 50%;
+    float: left;
+    text-align: right;
+    font-weight: bold;
+  }
+  
+  .account-detail-right
+  {
+    width: 50%;
+    float: right;
+    text-align: left;
+    padding-left: 20px;
+  }
+  
+  /* just used cos spacing between header and top edge was nothing */
+  .account-detail-parent
+  {
+    padding-top: 30px;
+  }
+  
+  .account-detail-middle
+  {
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    overflow-y:auto;
+    height: 410px;
+  }
+  
+  .button-placement
+  {
+    text-align: center;
+  }
+  
+  .labeller
+  {
+    margin: 0 0 0 0;
+    margin-bottom: 15px;
+    padding: 10px;
+  }
+  
+  .inputter
+  {
+    margin-bottom: 10px;
+    background-color: transparent;
+    padding: 10px;
+    padding-left: 2px;
+    outline: none;
+    outline-style: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border:none;
+    border-bottom: 1px solid black;
+    transition: 0.1s;
+    width: 30%;
+  }
+  
+  .btn-changePassword
+  {
+    background-color: #3F51B5;
+    border: none;
+    color: white;
+    padding: 2px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 1px 1px;
+    cursor: pointer;
+    width: 300px;
+    height: 50px;
+    transition: 0.2s;
+  }
+  
+  .btn-changePassword:hover
+  {
+    background-color: #2a377e;
+    transition: 0.2s;
+  }
