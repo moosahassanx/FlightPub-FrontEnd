@@ -21,14 +21,13 @@ const BookingPage = () => {
     const [logDet, setLogDet] = useState(false);
     const instance = (
         <Steps current={1} style={{cursor: "pointer"}}>
-            <Steps.Item title="Ticket Selection "/>
+            <Steps.Item title="Ticket Selection " onClick={event => window.location.href='/TicketSelectionPage'}/>
             <Steps.Item title="Passenger Details "/>
             <Steps.Item title='Payment'/>
             <Steps.Item title="Booking Confirmation "/>
         </Steps>
       );
     async function getUserId(){
-        console.log(loggerEmail)
         let url = `http://localhost:8080/getDetails?userName=${loggerEmail}`
         return await fetch(url)
         .then(response => response.json())
@@ -61,7 +60,6 @@ const BookingPage = () => {
         }, 100);
     }, [])
     useEffect(() => {
-        console.log(loggerEmail)
         if(loggerEmail !== 'null' && loggerEmail !== undefined){
             getUserId();
         }
@@ -79,7 +77,6 @@ const BookingPage = () => {
             formData.forEach((item)=>{
                 if(!item.loggedUser){
                     getGUserId(item).then(data =>{
-                        console.log(data)
                         item.gUserId = data;
                         sessionStorage.setItem("formData", JSON.stringify(formData));
                     })
@@ -99,7 +96,6 @@ const BookingPage = () => {
         let validationRule = /^(\d|\w)+$/i;
         let pattern = /[\d]{8}/g;
         let errors = "";
-        console.log(fName)
         if (!fName) {
             errors += "first name cannot be blank.\n";
         }
@@ -138,14 +134,11 @@ const BookingPage = () => {
     }
     const handleEmail = (e) =>{
         setEmail(e.target.value);
-        console.log(email)
     }
     const handlePNum = (e) =>{
         setPNum(e.target.value);
-        console.log(pNum)
     }
     const handleRemove = (i) =>{
-        console.log(i)
         if(i.email === loggerEmail){
             setLogDet(false)
         }
@@ -156,7 +149,6 @@ const BookingPage = () => {
         if(validates()){
             if(loggerEmail === email){
                 setLogDet(true);
-                console.log('im here ')
                 setFormData(old => {
                     return [...old, {userId: userId, gUserId: '',fName: fName, lName: lName, pNum: pNum, email: email, loggedUser: true}]
                 })
@@ -178,9 +170,8 @@ const BookingPage = () => {
         if(loggedIn === true && logDet != true){
             return[
                 <>
-                {/* {console.log(formData)} */}
                 {!logDet &&
-               <> {console.log("wtf")}
+               <> 
                     <Form className="border mx-2 mb-4">
                         <Row className="mb-2 mx-2">
                             <Form.Group as={Col} controlId="firstName">
@@ -241,7 +232,6 @@ const BookingPage = () => {
                 </>
             ]
         } else {
-            // console.log('im here' + passNum)
             return[
                 <>
                 {[...Array(parseInt(passNum - formData.length))].map((x, i) =>

@@ -103,7 +103,7 @@ const NavBar = () => {
             loginSuccessful= true;
 
             // local storage setting
-            var returnerFirstName = data.map(object => object.userName)
+            var returnerFirstName = data.map(object => object.firstName)
             var returnerLastName = data.map(object => object.lastName)
             var returnerUserName = data.map(object => object.userName)
             var returnerPasswordHash = data.map(object => object.passwordHash)
