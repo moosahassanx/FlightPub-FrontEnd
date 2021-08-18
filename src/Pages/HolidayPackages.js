@@ -1,7 +1,7 @@
 import {React, useState, useEffect } from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
-import HolidayPackage from '../Components/HolidayPackage';
-import '../Css/HolidayPackages.css';
+// import HolidayPackage from '../Components/HolidayPackage';
+// import '../Css/HolidayPackages.css';
 
 
 
@@ -64,7 +64,7 @@ const HolidayPackages = () => {
           </Col>
         </Row>
         <Row>
-          <HolidayPackage packages={recommendedHolidayPackages}/>
+          {/* <HolidayPackage packages={recommendedHolidayPackages}/> */}
         </Row>
         <br/>
         <br/>
@@ -76,16 +76,16 @@ const HolidayPackages = () => {
         </Row>
         <Row className="justify-content-md-center">
           <Col md="auto" id="solo">
-            <a href="#solo-travellers" class="a">Solo Travellers ></a>
+            <a href="#solo-travellers" class="a">Solo Travellers</a>
           </Col>
           <Col md="auto" id="family">
-            <a href="#family-travellers" class="a">Family Travellers ></a>
+            <a href="#family-travellers" class="a">Family Travellers</a>
           </Col>
           <Col md="auto" id="senior">
-            <a href="#senior-travellers" class="a">Senior Travellers ></a>
+            <a href="#senior-travellers" class="a">Senior Travellers</a>
           </Col>
           <Col md="auto" id="business">
-            <a href="#business-travellers" class="a">Business Travellers ></a>
+            <a href="#business-travellers" class="a">Business Travellers</a>
           </Col>
         </Row>
         <br/>
@@ -98,7 +98,7 @@ const HolidayPackages = () => {
           </Col>
         </Row>
         <Row>
-          <HolidayPackage packages={soloHolidayPackages}/>
+          {/* <HolidayPackage packages={soloHolidayPackages}/> */}
         </Row>
         <br/>
         <br/>
@@ -110,7 +110,7 @@ const HolidayPackages = () => {
           </Col>
         </Row>
         <Row>
-          <HolidayPackage packages={familyHolidayPackages}/>
+          {/* <HolidayPackage packages={familyHolidayPackages}/> */}
         </Row> 
         <br/>
         <br/>
@@ -122,7 +122,7 @@ const HolidayPackages = () => {
           </Col>
         </Row>
         <Row>
-          <HolidayPackage packages={seniorHolidayPackages}/>
+          {/* <HolidayPackage packages={seniorHolidayPackages}/> */}
         </Row>
         <br/>
         <br/>
@@ -134,7 +134,7 @@ const HolidayPackages = () => {
           </Col>
         </Row>
         <Row>
-          <HolidayPackage packages={businessHolidayPackages}/>
+          {/* <HolidayPackage packages={businessHolidayPackages}/> */}
         </Row>
       </Container>
     </main>
