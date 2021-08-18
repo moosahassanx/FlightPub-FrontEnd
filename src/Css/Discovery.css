@@ -130,3 +130,198 @@ input:checked + .discovery-slider:before
     -ms-transform: translateX(196px);
     transform: translateX(196px);
 }
+
+
+/******************************************************************************/
+
+.discovery-text-table
+{
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    /*border: 1px solid black;*/
+}
+
+.discovery-text-switch
+{
+    position: relative;
+    display: inline-block;
+    background-size: 100%;
+    width: 100px;
+    height: 30px;
+    margin: 10px;
+}
+
+.discovery-text-switch input
+{
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.discovery-text-slider
+{
+    background-color: rgb(240, 240, 240);
+    padding: 5px;
+    font-variant: small-caps;
+
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.discovery-text-slider:before
+{
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 196px;
+    left: 4px;
+    bottom: 4px;
+
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+
+input:checked + .discovery-text-slider
+{
+    background-color: lightskyblue;
+    opacity: 1;
+}
+
+input:checked + .discovery-text-slider:before
+{
+    -webkit-transform: translateX(196px);
+    -ms-transform: translateX(196px);
+    transform: translateX(196px);
+}
+
+/****************************************************************************/
+
+.discovery-covid-avoidance-switch
+{
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+  
+/* Hide default HTML checkbox */
+.discovery-covid-avoidance-switch input
+{
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+  
+/* The slider */
+.discovery-covid-slider
+{
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.discovery-covid-slider:before
+{
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .discovery-covid-slider
+{
+    background-color: #2196F3;
+}
+
+input:focus + .discovery-covid-slider
+{
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .discovery-covid-slider:before
+{
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+.discovery-covid-slider.round
+{
+    border-radius: 34px;
+}
+  
+.discovery-covid-slider.round:before
+{
+    border-radius: 50%;
+}
+
+/*********************************************************************************/
+
+.history-flight-table
+{
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    /*border: 1px solid black;*/
+}
+
+.history-flight-data
+{
+    background-color:lightskyblue;
+    padding: 5px;
+    text-align: center;
+}
+
+.history-flight-text
+{
+    font-variant: small-caps;
+
+    height: 50px;
+    width: 300px;
+    margin: left;
+    text-align: left;
+    /*border: 1px solid black;*/
+}
+
+.history-flight-img
+{
+    float: right;
+}
+
+.flight-history-button
+{
+    padding: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.bookButton
+{
+    width:150px;
+    height: 40px;
+    border: none;
+    background-color: white;
+    font-size: large;
+    font-variant: small-caps;
+}
