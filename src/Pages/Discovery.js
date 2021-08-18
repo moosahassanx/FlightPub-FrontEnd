@@ -14,7 +14,7 @@ const Discovery = () => {
     
     const [covid, setCovidFlag] = useState(false);
     const [uName, setUName] = useState(() => {
-        const initial = JSON.parse(localStorage.getItem('user-login-name'));
+        const initial = JSON.parse(localStorage.getItem('user-login-email'));
         return initial;
     });
     const [userHistoryList, setUserHistoryList] = useState([]);
@@ -58,20 +58,7 @@ const Discovery = () => {
         setDiscoveryCalculated(!discoveryCalculated);
         getDestinations();
     }
-
-    // incremental counters
-    /*
-    function addTag(e)
-    {
-        var newTags = tags;
-
-        if(newTags.indexOf(e) != -1)
-            newTags.push(e);
-        else
-            newTags.splice(newTags.indexOf(e));
-        setTags(newTags);
-    }*/
-
+    
     function toggleCovid() { setCovidFlag(!covid); }
 
     function toggleAfricaFlag() { setAfricaFlag(!africa); }
@@ -181,19 +168,12 @@ const Discovery = () => {
             return;
         
         let top3 = [];
-        
-
-        const doThing = async () => {
-            const response = await fetch('http://localhost:8080/getTop3Destinations')
-            const json = await response.json();
-            console.log(json);
-        }
-
-        doThing();
 
         const fetchData = async () => {
             const response = await fetch('http://localhost:8080/getUserHistory?userName=' + uName)
             const json = await response.json();
+
+            console.log(JSON.parse(localStorage.getItem('user-login-name')));
 
             json.forEach(e => top3.push(
                 <td>
