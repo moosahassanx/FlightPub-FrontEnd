@@ -20,6 +20,7 @@ const NavBar = () => {
         const loginLastNameData = localStorage.getItem('user-login-last-name');
         const loginEmailData = localStorage.getItem('user-login-email');
         const loginPasswordData = localStorage.getItem('user-login-password');
+        const loginTypeData = localStorage.getItem('user-login-type');
 
         if(loginStateData)      // if react picks up on previous data then use this data rather than generating entirely new page
         {
@@ -28,6 +29,7 @@ const NavBar = () => {
             setLoggerLastName(JSON.parse(loginLastNameData));
             setLoggerEmail(JSON.parse(loginEmailData));
             setLoggerPassword(JSON.parse(loginPasswordData));
+            setLoggerType(JSON.parse(loginTypeData));
         }
     }, [])
 
@@ -40,6 +42,7 @@ const NavBar = () => {
     const [loggerLastName, setLoggerLastName] = useState("null");
     const [loggerEmail, setLoggerEmail] = useState("null");
     const [LoggerPassword, setLoggerPassword] = useState("null");
+    const [loggerType, setLoggerType] = useState("null");
     const [openRegistrationForm, setOpenRegistrationForm] = useState(false);
 
     // login state use effects
@@ -49,6 +52,7 @@ const NavBar = () => {
         localStorage.setItem('user-login-last-name', JSON.stringify(loggerLastName));
         localStorage.setItem('user-login-email', JSON.stringify(loggerEmail));
         localStorage.setItem('user-login-password', JSON.stringify(LoggerPassword));
+        localStorage.setItem('user-login-type', JSON.stringify(loggerType))
     })
 
     // the actual business logic for a user logging in
@@ -59,6 +63,7 @@ const NavBar = () => {
 
     // Async API call to fetch the users in the db
     async function loginChecker() {
+        // TODO: have users login with secure encryption..
         
         // TODO: this might be used later - if not, remove this in the final version
         const loginCredentials = [{
@@ -88,7 +93,7 @@ const NavBar = () => {
                 // get error message from body or default to response statusText
                 const error = (data && data.message) || response.statusText;
                 return Promise.reject(error);
-            }
+            }            
 
             console.log("LOGIN SUCCESSFUL!!")
             console.log(data.map((object => object)))
@@ -102,12 +107,13 @@ const NavBar = () => {
             var returnerLastName = data.map(object => object.lastName)
             var returnerUserName = data.map(object => object.userName)
             var returnerPasswordHash = data.map(object => object.passwordHash)
+            var returnerUserType = data.map(object => object.userType)
 
             setLoggerName(returnerFirstName)
             setLoggerLastName(returnerLastName)
             setLoggerEmail(returnerUserName)
             setLoggerPassword(returnerPasswordHash)
-
+            setLoggerType(returnerUserType)
         })
 
         // react catch
@@ -141,6 +147,7 @@ const NavBar = () => {
         setLoggerLastName(null);
         setLoggerEmail(null);
         setLoggerPassword(null);
+        setLoggerType(null);
         alert("Successfully logged out of Flightpub.");
     }
 
@@ -162,7 +169,9 @@ const NavBar = () => {
             <Nav className="mr-auto">
                 <Nav.Link href="\">Home</Nav.Link>
                 <Nav.Link href="\features">Features</Nav.Link>
-                <Nav.Link href="\Groups">Groups</Nav.Link>
+                <Nav.Link href="\Groups">Groups</Nav.Link>                
+                <Nav.Link href="\discovery">Discovery</Nav.Link>
+                <Nav.Link href="\HolidayPackages">Holiday Packages</Nav.Link>
 
                 {/* only appear when the user has logged in */}
                 {
@@ -170,8 +179,13 @@ const NavBar = () => {
                         <Nav.Link href="\accountManagement">Account Management</Nav.Link>
                     ) : null
                 }
-                
-                <Nav.Link href="\discovery">Discovery</Nav.Link>
+
+                {/* only appear if the user is admin */}
+                {
+                    loggerType == "admin" ? (
+                        <Nav.Link href="\adminControl">Admin Control</Nav.Link>
+                    ) : null
+                }
             </Nav>
             
             {
