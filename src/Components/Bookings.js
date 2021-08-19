@@ -50,7 +50,9 @@ const Bookings = () => {
                                                 <Row>
                                                     <Col>
                                                         Booking reference number: {booking.bookId}<br/><br/>
-                                                        Passenger name: {booking.user.firstName} {booking.user.lastName}<br/><br/>
+                                                        Passenger name: {(booking.guestUser !== null)?
+                                                        booking.guestUser.firstName + booking.guestUser.lastName
+                                                        :booking.user.firstName + booking.user.lastName}<br/><br/>
                                                         Flight number: {booking.flight_number}<br/><br/>
                                                     </Col>
                                                     <Col>

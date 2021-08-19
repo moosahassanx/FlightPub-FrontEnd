@@ -10,7 +10,7 @@ import { FaOldRepublic } from 'react-icons/fa';
 //plans to extend the search functionality to inlude the option to search from departure destination to all Available Destination 
 //and display a list of possible Destinations and their prices for users that would like to travel but are unsure where to go
 const SearchForm = () => {
-    //form parameters, all set to null intially except for the trip type, departure dat and return date (arrDate)
+    //form parameters, all set to null intially except for the trip type, departure date and return date (arrDate)
     //trip type is set to One-Way by default and the dates are set to the current date
     const[tripType, setTripType] = useState('One-Way');
     const[destFrom, setDestFrom] = useState();
