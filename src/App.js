@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { NavBar, Footer, CardCarousel} from './Components/index';
-import { Home, Features, Register, Business, AccountManagement, Discovery, Groups, BookingPage, TicketSelectionPage, PaymentPage, ConfirmPage } from './Pages/index';
-import HolidayPackages from './Pages/HolidayPackages';
+import { Home, Features, Register, Business, AccountManagement, Discovery, Groups, BookingPage, TicketSelectionPage, PaymentPage, ConfirmPage, HolidayPackages } from './Pages/index';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Css/app.css'
 import 'react-dates/lib/css/_datepicker.css';
