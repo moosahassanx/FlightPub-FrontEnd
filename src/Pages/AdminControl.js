@@ -6,6 +6,7 @@ import BlackListDestinations from '../Components/BlacklistDestinations';
 import AdminViewDestinations from '../Components/AdminViewDestinations';
 import AdminViewUsers from '../Components/AdminViewUsers';
 import AdminViewSponsoredAirlines from '../Components/AdminViewSponsoredAirlines';
+import AdminViewRequests from '../Components/AdminViewRequests';
 
 const AdminControl = () => {
 
@@ -244,7 +245,7 @@ const AdminControl = () => {
                                 {/* setting LHS for details */}
                                 <div className='account-detail-parent'>
                                     <div className='account-detail-middle'>
-                                        <AdminViewUsers />
+                                        <AdminViewRequests />
                                     </div>
                                 </div>
                             </div>

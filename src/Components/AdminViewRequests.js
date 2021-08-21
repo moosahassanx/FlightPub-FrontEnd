@@ -1,63 +1,114 @@
 import {useState, useEffect} from 'react'
 import '../Css/AdminViewRequests.css';
 
-const AdminViewSponsoredAirlines = () => {
+const AdminViewRequests = () => {
     // use states
-    const [airlines, setAirlines] = useState([]);
+    const [users, setUsers] = useState([]);
     
     // fetching list of users
-    async function getAirlines()
+    async function getUsers()
     {
         // retrieve data from db
-        await fetch('http://localhost:8080/getPermissionRequests')
+        await fetch('http://localhost:8080/getUserRequests')
         .then(response => response.json())
-        .then(json => console.log(json))
-        .then(json => setAirlines(json))
+        .then(json => setUsers(json))
     }
 
     // render the users
-    function renderAirlines()
+    function renderUsers()
     {
         // loading destinations on startup if possible
-        if(airlines == null)
+        if(users == null)
         {
-            getAirlines()
+            getUsers()
         }
 
-        console.log(airlines);
+        console.log(users);
 
         // render the list
         return (
-            airlines.map((element) => (
+            users.map((element) => (
                 <div>
                     <div className="full-name">
-                        <h3>{element.airlineName}</h3>
+                        <h3>{element.userName}</h3>
                     </div>
 
                     <div className="other-shit">
-                        <h5>airlineCode: {element.airlineCode}</h5>
-                        <h5>sponsored: {element.sponsored}</h5>
-                        <button>set as sponsored</button>
-                        <button>remove as sponsored</button>
+                        <h5>id: {element.id}</h5>
+                        <h5>firstName: {element.firstName}</h5>
+                        <h5>lastName: {element.lastName}</h5>
+                        <h5>phoneNumber: {element.phoneNumber}</h5>
+                        <h5>address: {element.address}</h5>
+                        <h5>userType: {element.userType}</h5>
+                        <h5>why: {element.why}</h5>
+                        <h5>referencing: {element.referencing}</h5>
+                        <h5>experience: {element.experience}</h5>
+                        <h5>requestingFor: {element.requestingFor}</h5>
+                        <button>delete user</button>
                         <hr></hr>
                     </div>
                 </div>
             ))
         )
+    }
+
+    async function approveRequest()
+    {
+        console.log("userName: " + document.getElementById("userName1").value);
+
+        // retrieve data from db
+        await fetch('http://localhost:8080/promoteUser', {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userName: document.getElementById("userName1").value,
+            })
+        })
+
+        // successful backend reach
+        .then(response => {
+            const data = response.json();
+
+            // check for error response
+            if (!response.ok) {
+                // get error message from body or default to response statusText
+                const error = (data && data.message) || response.statusText;
+                return Promise.reject(error);
+            }
+        })
+
+        // react catch
+        .catch(error => {
+            console.error('CATCH ERROR: ', error.toString());
+            alert("Error: airline code not found.");
+        });
+
 
     }
+
     
     // main renderer
     return (
         <div className="single-card">
-            {/* render the fetched users */}
             <div className="full-name">
-                <button onClick={getAirlines}>Refresh Airlines Listing</button>
+                <form>
+                    <h4>Approve User Request by Search</h4>
+                    <input type='text' id='userName1' placeholder='Enter username'></input>
+                    <submit className='submission' onClick={approveRequest}>Approve Request</submit>
+                </form>
+                <hr></hr>
             </div>
 
-            {renderAirlines()}
+            <div className="full-name">
+                <button onClick={getUsers}>Refresh Users Listing</button>
+            </div>
+
+            {renderUsers()}
         </div>
     )
 }
 
-export default AdminViewSponsoredAirlines;
+export default AdminViewRequests;

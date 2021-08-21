@@ -46,6 +46,47 @@ const AdminViewUsers = () => {
                 </div>
             ))
         )
+    }
+
+    async function deleteUser()
+    {
+        var successful = false;
+
+        // retrieve data from db
+        await fetch('http://localhost:8080/removeUser', {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userName: document.getElementById("userName").value,
+            })
+        })
+        // successful backend reach
+        .then(response => {
+            const data = response.json();
+
+            // check for error response
+            if (!response.ok) {
+                // get error message from body or default to response statusText
+                const error = (data && data.message) || response.statusText;
+                return Promise.reject(error);
+            }
+        })
+        // react catch
+        .catch(error => {
+            console.error('CATCH ERROR: ', error.toString());
+        });
+
+        successful = true;
+
+        // unsuccessful response
+        if(successful == false)
+        {
+            alert("Error: user not found.");
+        }
+
 
     }
     
@@ -53,6 +94,15 @@ const AdminViewUsers = () => {
     return (
         <div className="single-card">
             {/* render the fetched users */}
+            <div className="full-name">
+                <form>
+                    <h4>Delete user by search</h4>
+                    <input type='text' id='userName' placeholder='Enter username'></input>
+                    <submit className='submission' onClick={deleteUser}>Delete user from database</submit>
+                </form>
+                <hr></hr>
+            </div>
+
             <div className="full-name">
                 <button onClick={getUsers}>Refresh Users Listing</button>
             </div>

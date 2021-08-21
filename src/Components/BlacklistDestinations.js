@@ -45,13 +45,13 @@ const BlackListDestinations = () => {
                             <div className="other-shit">
                                 <h5>Number of times booked: {destination.timesBooked}</h5>
                                 {
-                                    destination.covid == '1' ? (
+                                    destination.covid == true ? (
                                         <h5>Blacklisted: True</h5>
+                                    ) : (
+                                        <h5>Blacklisted: False</h5>
                                     )
-                                    :
-                                    <h5>Blacklisted: False</h5>
                                 }
-
+                                <h5>Destination code: {destination.destinationCode}</h5>
                                 <button onClick={destinationCodeInConsole(destination.destinationCode)}>set blacklisted</button><br></br><br></br>
                                 <button >set unblacklisted</button>
 
@@ -66,8 +66,97 @@ const BlackListDestinations = () => {
 
     }
 
+    async function blacklistDestination()
+    {
+        console.log("desCode: " + document.getElementById("desCode").value);
+
+        // retrieve data from db
+        await fetch('http://localhost:8080/desCovid', {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                destCode: document.getElementById("desCode").value,
+                trueOrFalse: "1"
+            })
+        })
+
+        // successful backend reach
+        .then(response => {
+            const data = response.json();
+
+            // check for error response
+            if (!response.ok) {
+                // get error message from body or default to response statusText
+                const error = (data && data.message) || response.statusText;
+                return Promise.reject(error);
+            }
+        })
+
+        // react catch
+        .catch(error => {
+            console.error('CATCH ERROR: ', error.toString());
+            alert("Error: destination code not found.");
+        });
+    }
+
+    async function unBlacklistDestination()
+    {
+        console.log("desCode: " + document.getElementById("desCode").value);
+
+        // retrieve data from db
+        await fetch('http://localhost:8080/desCovid', {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                destCode: document.getElementById("desCode").value,
+                trueOrFalse: "0"
+            })
+        })
+
+        // successful backend reach
+        .then(response => {
+            const data = response.json();
+
+            // check for error response
+            if (!response.ok) {
+                // get error message from body or default to response statusText
+                const error = (data && data.message) || response.statusText;
+                return Promise.reject(error);
+            }
+        })
+
+        // react catch
+        .catch(error => {
+            console.error('CATCH ERROR: ', error.toString());
+            alert("Error: destination code not found.");
+        });
+    }
+
     return (
         <div className="single-card">
+            <div className="full-name">
+                <form>
+                    <h4>Blacklist Destination by Search</h4>
+                    <input type='text' id='desCode' placeholder='Enter destination code'></input>
+                    <submit className='submission' onClick={blacklistDestination}>Blacklist destination</submit>
+                </form>
+                <hr></hr>
+            </div>
+
+            <div className="full-name">
+                <form>
+                    <h4>Unblacklist Destination by Search</h4>
+                    <input type='text' id='desCode' placeholder='Enter destination code'></input>
+                    <submit className='submission' onClick={unBlacklistDestination}>Unblacklist destination</submit>
+                </form>
+                <hr></hr>
+            </div>
             
             {/* render the fetched destinations */}
             <div className="full-name">
