@@ -792,7 +792,7 @@ const SearchForm = () => {
 						</div>
 						<br />
 						<div>
-							<p>Depature Destination</p>
+							<p>Departure Destination</p>
 							<Dropdown
 								placeholder='Travelling from'
 								fluid
@@ -911,7 +911,7 @@ const SearchForm = () => {
 						</div>
 						<br />
 						<div>
-							<p>Depature Destination</p>
+							<p>Departure Destination</p>
 							<Dropdown
 								placeholder='Travelling from'
 								fluid
