@@ -16,7 +16,11 @@ const ConfirmPage = () => {
 
 	//getting the bookings' details from session storage
 	useEffect(() => {
-		setBookings(JSON.parse(sessionStorage.getItem("bookId")));
+		let data = JSON.parse(sessionStorage.getItem("bookId"));
+		setBookings(data);
+		if (data === null) {
+			window.location.href = "/";
+		}
 	}, []);
 
 	const localTime = (date) => {

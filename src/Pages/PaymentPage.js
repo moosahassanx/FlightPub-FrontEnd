@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Steps } from "rsuite";
 import Card from "react-credit-cards";
 import { Row, Col, Card as C, Button } from "react-bootstrap";
+import { FaPlaneDeparture, FaPlaneArrival } from "react-icons/fa";
+
 import "rsuite/dist/styles/rsuite-default.css";
 import {
 	formatCreditCardNumber,
@@ -10,7 +12,6 @@ import {
 } from "../Util/CardUtils.js";
 import "react-credit-cards/es/styles-compiled.css";
 import "../Css/Payment.css";
-import moment from "moment";
 
 const PaymentPage = () => {
 	//State object to store the payment data
@@ -417,7 +418,15 @@ const PaymentPage = () => {
 						<h3>The Selected Tickets</h3>
 						{ticket && (
 							<C>
-								<C.Header as='h5'>{ticket.ticketType.name}</C.Header>
+								<C.Header as='h5'>
+									{ticket.ticketType.name}
+									<br />
+									Flight {flight.flightNumber} &emsp; <FaPlaneDeparture />{" "}
+									{flight.departureCode.airport},{" "}
+									{flight.departureCode.countryCode3.countryName} &emsp;
+									<FaPlaneArrival /> {flight.destinationCode.airport},{" "}
+									{flight.destinationCode.countryCode3.countryName} <br />{" "}
+								</C.Header>
 								<C.Body>
 									<C.Title>Price ${ticket.totalPrice}</C.Title>
 									<C.Text>
@@ -447,7 +456,17 @@ const PaymentPage = () => {
 						)}
 						{reTicket && (
 							<C>
-								<C.Header as='h5'>{reTicket.ticketType.name}</C.Header>
+								<C.Header as='h5'>
+									{reTicket.ticketType.name}
+									<br />
+									Flight {returnFlight.flightNumber} &emsp; <FaPlaneDeparture />{" "}
+									{returnFlight.departureCode.airport},{" "}
+									{returnFlight.departureCode.countryCode3.countryName} &emsp;
+									<FaPlaneArrival /> {
+										returnFlight.destinationCode.airport
+									}, {returnFlight.destinationCode.countryCode3.countryName}{" "}
+									<br />{" "}
+								</C.Header>
 								<C.Body>
 									<C.Title>Price ${reTicket.totalPrice}</C.Title>
 									<C.Text>
