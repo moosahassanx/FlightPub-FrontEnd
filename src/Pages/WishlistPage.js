@@ -12,97 +12,85 @@ const WishlistPage = () => {
     const [wishlist, setWishlist] = useState(null);
     const [userId, setUserId] = useState(null);
 
-    /*async function getUserId() {
-        let url = `http://localhost:8080/getDetails?userName=${userName[0]}`;
-        return await fetch(url)
-            .then((response) => response.json())
-            .then((data) => {
-                setUserId(data.id);
-            });
-    }*/
-
     useEffect(() => {
         setTimeout(() => {
             setUserName(JSON.parse(localStorage.getItem("user-login-email")));
             console.log(userName);
 
-            }, 1000);
+            }, 100);
 
     }, [])
 
-    /*useEffect(() => {
-        console.log(userName);
-        if (userName) {
-            getUserId();
-        }
-    }, [userName])*/
 
     useEffect(() => {
         console.log(userName);
-        getWishlist();
+        if (userName) {
+            getWishlist();
+        }
     }, [userName])
 
     async function getWishlist()
     {
         let newWishList = [];
-        let url = `http://localhost:8080/getWishlist?user_name=` + userName;
+        let url = `/getWishlist?user_name=` + userName;
         console.log(userName);
         if (userName != null || userName != '') {
             const fetchList = async () => {
                 const response = await fetch(url)
-                console.log(response)
-                const json = await response.json()
-                console.log(json)
-                if (json.length === 0 || json == null){
-                    return
-                }
-                json.forEach(element =>
-                    newWishList.push(
-                        <tr>
-                            <div>
-                                <h4>{element.countryCode3.countryName.toString()}</h4>
-                            </div>
-                            <div>
-                                <button type="button" onClick={() => handleRemove(element.countryCode3)}>
-                                    Remove
-                                </button>
-                            </div>
-                        </tr>
-                    )
-                );
-                setWishlist(newWishList)
+                //const json = await response.json()
+                fetch(url)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        data.forEach(element =>
+                            newWishList.push(
+                                <tr>
+                                    <div>
+                                        <h4>{element.countryCode3.airport}</h4>
+                                    </div>
+                                    <div>
+                                        <button type="button" onClick={() => handleRemove(element)}>
+                                            Remove
+                                        </button>
+                                    </div>
+                                </tr>
+                            )
+                        );
+                        setWishlist(newWishList)
+                    });
             }
             await fetchList();
-            /*await fetch(url)
-                .then((response) => response.json())
-                .then(json => json.forEach(element => {
-                    newWishList.push(
-                        <tr>
-                            <div>
-                                <h4>{element.countryCode3.countryName.toString()}</h4>
-                            </div>
-                            <div>
-                                <button type="button" onClick={() => handleRemove(element.countryCode3)}>
-                                    Remove
-                                </button>
-                            </div>
-                        </tr>
-                    );
-                    console.log(element);
-                }))
-        }
-        setWishlist(newWishList);
-*/
         }
         return newWishList;
     }
 
-    function handleRemove(code) {
-        //remove destination from wishlist handler
-        console.log(code);
-        const newWishlist = wishlist.filter((destination) => destination.code !== code);
+    async function handleRemove(element) {
+        // retrieve data from db
+        await fetch('/removeWishlistItem', {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userName: userName[0],
+                countryCode3: element.countryCode3.destinationCode
+            })
+        })
+            .then(response => {
+                const data = response.json();
 
-        setWishlist(newWishlist);
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response statusText
+                    const error = (data && data.message) || response.statusText;
+                    return Promise.reject(error);
+                }
+                getWishlist();
+            })
+            .catch(error => {
+                console.error('CATCH ERROR: ', error.toString());
+            });
+
     }
 
     return (
