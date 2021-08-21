@@ -83,7 +83,7 @@ const AccountManagement = () => {
 
         // ==== NEW CODE
         // GET request using fetch with error handling
-        await fetch('http://localhost:8080/login', {
+        await fetch('/login', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -177,7 +177,7 @@ const AccountManagement = () => {
         }]
 
         // retrieving list of users from backend
-        await fetch('http://localhost:8080/changePassword', {
+        await fetch('/changePassword', {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'

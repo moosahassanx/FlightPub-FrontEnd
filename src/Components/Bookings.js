@@ -12,7 +12,7 @@ const Bookings = () => {
 	useEffect(() => {
 		let email = JSON.parse(loginEmailData);
 		console.log(email[0]);
-		let url = `http://localhost:8080/getDetails?userName=${email[0]}`;
+		let url = `/getDetails?userName=${email[0]}`;
 		fetch(url)
 			.then((response) => response.json())
 			.then((data) => {
@@ -23,7 +23,7 @@ const Bookings = () => {
 	//useEffect to fetch the list of user bookings once the userId becomes available
 	useEffect(() => {
 		if (userId) {
-			let url = `http://localhost:8080/findBookings?userId=${userId}`;
+			let url = `/findBookings?userId=${userId}`;
 			fetch(url)
 				.then((response) => response.json())
 				.then((data) => {

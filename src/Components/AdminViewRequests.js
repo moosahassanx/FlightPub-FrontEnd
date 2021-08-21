@@ -9,7 +9,7 @@ const AdminViewRequests = () => {
     async function getUsers()
     {
         // retrieve data from db
-        await fetch('http://localhost:8080/getUserRequests')
+        await fetch('/getUserRequests')
         .then(response => response.json())
         .then(json => setUsers(json))
     }
@@ -57,7 +57,7 @@ const AdminViewRequests = () => {
         console.log("userName: " + document.getElementById("userName1").value);
 
         // retrieve data from db
-        await fetch('http://localhost:8080/promoteUser', {
+        await fetch('/promoteUser', {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',

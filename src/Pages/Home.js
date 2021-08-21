@@ -27,7 +27,7 @@ const Home = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch('http://localhost:8080/getDestinations');
+            const response = await fetch('/getDestinations');
             const json = await response.json();
             setLocations(await json)
 

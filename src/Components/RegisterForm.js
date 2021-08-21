@@ -84,7 +84,7 @@ class RegisterForm extends React.Component
           formBody.push(key + "=" + value);
         }
         formBody = formBody.join("&");
-        fetch('http://localhost:8080/registerUser', {
+        fetch('/registerUser', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'

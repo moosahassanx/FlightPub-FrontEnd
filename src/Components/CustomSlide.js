@@ -11,7 +11,7 @@ const CustomSlide = () => {
   //the suggestion implemented in the final implementation will be based on the Previously searched and booked flights for each user
   //for now the customSlide component fetches top 10 visted destinations from the backend on mount
   useEffect(() => {
-       fetch('http://localhost:8080/destinationtrending')
+       fetch('/destinationtrending')
       .then(response => response.json())
       .then(data =>{ 
         setDestinations(data);

@@ -10,7 +10,7 @@ const BlackListDestinations = () => {
     async function getDestinations()
     {
         // retrieve data from db
-        await fetch('http://localhost:8080/getDestinations')
+        await fetch('/getDestinations')
         .then(response => response.json())
         .then(json => setDestinations(json))
     }
@@ -71,7 +71,7 @@ const BlackListDestinations = () => {
         console.log("desCode: " + document.getElementById("desCode").value);
 
         // retrieve data from db
-        await fetch('http://localhost:8080/desCovid', {
+        await fetch('/desCovid', {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -107,7 +107,7 @@ const BlackListDestinations = () => {
         console.log("desCode: " + document.getElementById("desCode").value);
 
         // retrieve data from db
-        await fetch('http://localhost:8080/desCovid', {
+        await fetch('/desCovid', {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',

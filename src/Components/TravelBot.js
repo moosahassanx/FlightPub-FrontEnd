@@ -98,7 +98,7 @@ const TravelBot = () => {
         var trendingMessage = "";
         var newDestinationState = destinations;
 
-        await fetch('http://localhost:8080/destinationtrending')
+        await fetch('/destinationtrending')
             .then(response => response.json())
             .then(json => json.forEach(element => {
                 trendingMessage += element;
@@ -117,7 +117,7 @@ const TravelBot = () => {
 
 //         var newticketState = tickets
 
-//         await fetch('http://localhost:8080/trendingflights?Destination=' + input)
+//         await fetch('/trendingflights?Destination=' + input)
 //               .then(res => res.json())
 //               .then(json => json.forEach(e => {
 //                   newticketState.push(e)

@@ -9,7 +9,7 @@ const AdminViewUsers = () => {
     async function getUsers()
     {
         // retrieve data from db
-        await fetch('http://localhost:8080/getUsers')
+        await fetch('/getUsers')
         .then(response => response.json())
         .then(json => setUsers(json))
     }
@@ -53,7 +53,7 @@ const AdminViewUsers = () => {
         var successful = false;
 
         // retrieve data from db
-        await fetch('http://localhost:8080/removeUser', {
+        await fetch('/removeUser', {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -89,6 +89,7 @@ const AdminViewUsers = () => {
 
 
     }
+    
     
     // main renderer
     return (

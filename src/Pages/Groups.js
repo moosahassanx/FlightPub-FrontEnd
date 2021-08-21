@@ -48,7 +48,7 @@ const Groups = () => {
 		) {
 			// async fetch to see if the user exists in the database
 
-			await fetch("http://localhost:8080/checkExists?username=" + userInput)
+			await fetch("/checkExists?username=" + userInput)
 				.then((res) => res.json())
 				.then((json) => setMarkers(json));
 

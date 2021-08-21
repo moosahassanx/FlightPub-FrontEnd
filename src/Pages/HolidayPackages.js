@@ -18,32 +18,32 @@ const HolidayPackages = () => {
   
   useEffect(() => {
     const fetchSoloData = async () => {
-    const response = await fetch('http://localhost:8080/getSoloHolidayPackages');
+    const response = await fetch('/getSoloHolidayPackages');
     const data = await response.json();
     setSoloHolidayPackages(await data)
   }
     const fetchFamilyData = async () => {
-    const response = await fetch('http://localhost:8080/getFamilyHolidayPackages');
+    const response = await fetch('/getFamilyHolidayPackages');
     const data = await response.json();
     setFamilyHolidayPackages(await data)
   } 
     const fetchSeniorData = async () => {
-    const response = await fetch('http://localhost:8080/getSeniorHolidayPackages');
+    const response = await fetch('/getSeniorHolidayPackages');
     const data = await response.json();
     setSeniorHolidayPackages(await data)
   } 
     const fetchBusinessData = async () => {
-    const response = await fetch('http://localhost:8080/getBusinessHolidayPackages');
+    const response = await fetch('/getBusinessHolidayPackages');
     const data = await response.json();
     setBusinessHolidayPackages(await data)
   }
     const fetchTrendingData = async () => {
-    const response = await fetch('http://localhost:8080/trendingDestinations');
+    const response = await fetch('/trendingDestinations');
     const data = await response.json();
     setTrendingDestinations(await data)
   }
     const fetchRecommendedData = async () => {
-    const response = await fetch('http://localhost:8080/getRecommended');
+    const response = await fetch('/getRecommended');
     const data = await response.json();
     setRecommendedHolidayPackages(await data)
   }

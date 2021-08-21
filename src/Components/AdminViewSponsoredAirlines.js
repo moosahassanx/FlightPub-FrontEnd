@@ -9,7 +9,7 @@ const AdminViewSponsoredAirlines = () => {
     async function getAirlines()
     {
         // retrieve data from db
-        await fetch('http://localhost:8080/getAirlines')
+        await fetch('/getAirlines')
         .then(response => response.json())
         .then(json => setAirlines(json))
     }
@@ -55,7 +55,7 @@ const AdminViewSponsoredAirlines = () => {
     async function sponsorAirline()
     {
         // retrieve data from db
-        await fetch('http://localhost:8080/updateSponsorship', {
+        await fetch('/updateSponsorship', {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -89,7 +89,7 @@ const AdminViewSponsoredAirlines = () => {
     async function unsponsorAirline()
     {
         // retrieve data from db
-        await fetch('http://localhost:8080/updateSponsorship', {
+        await fetch('/updateSponsorship', {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',

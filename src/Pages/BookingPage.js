@@ -33,7 +33,7 @@ const BookingPage = () => {
 	);
 	//get the user id if a user is logged in
 	async function getUserId() {
-		let url = `http://localhost:8080/getDetails?userName=${loggerEmail}`;
+		let url = `/getDetails?userName=${loggerEmail}`;
 		return await fetch(url)
 			.then((response) => response.json())
 			.then((data) => {
@@ -73,7 +73,7 @@ const BookingPage = () => {
 
 	//getting the guest user
 	async function getGUserId(item) {
-		let url = `http://localhost:8080/getGuserId?email=${item.email}&firstName=${item.fName}&lastName=${item.lName}&phoneNumber=${item.pNum}`;
+		let url = `/getGuserId?email=${item.email}&firstName=${item.fName}&lastName=${item.lName}&phoneNumber=${item.pNum}`;
 		return await fetch(url).then((response) => response.json());
 	}
 	//once a passenger details form is submitted and validated, their info will be added to the database

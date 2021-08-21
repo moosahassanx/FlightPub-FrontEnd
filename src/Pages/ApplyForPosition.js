@@ -45,7 +45,7 @@ const ApplyForPosition = () => {
         console.log("agent OR admin: " + requestFor);
 
         // input data into db
-        await fetch('http://localhost:8080/addToRequestList', {
+        await fetch('/addToRequestList', {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',

@@ -37,7 +37,7 @@ const TicketSelectionPage = () => {
 	//fetches the tickets available for the flight selected
 	async function getTicketData(flightInfo) {
 		let d = new Date(flightInfo.departureTime);
-		let url = `http://localhost:8080/getticketprice?fnum=${
+		let url = `/getticketprice?fnum=${
 			flightInfo.flightNumber
 		}&tCode=${
 			flightInfo.ticketType.ticketCode
@@ -48,7 +48,7 @@ const TicketSelectionPage = () => {
 	//checks for the available tickets for each flight
 	async function getFlightAvailblity(flight) {
 		let d = new Date(flight.departureTime);
-		var url = `http://localhost:8080/getAvailability?depTime=${d.toJSON()}&flightNum=${
+		var url = `/getAvailability?depTime=${d.toJSON()}&flightNum=${
 			flight.flightNumber
 		}&depSeats=${numberOfTravellers}&class=${ticketClass}`;
 		return await fetch(url).then((response) => response.json());

@@ -212,13 +212,13 @@ const SearchForm = () => {
 	//api call to get the lowest price for a flight with the specified class and date
 	async function getPrice(num, date) {
 		let d = new Date(date);
-		var url = `http://localhost:8080/getlowprice?fNum=${num}&class=${tClass}&date=${d.toJSON()}`;
+		var url = `/getlowprice?fNum=${num}&class=${tClass}&date=${d.toJSON()}`;
 		return await fetch(url).then((response) => response.json());
 	}
 	//api call to check if there are seats available on the specified flight for the number of passengers specified by the user
 	async function getFlightAvailblity(flight) {
 		let d = new Date(flight.departureTime);
-		var url = `http://localhost:8080/getAvailability?depTime=${d.toJSON()}&flightNum=${
+		var url = `/getAvailability?depTime=${d.toJSON()}&flightNum=${
 			flight.flightNumber
 		}&depSeats=${numberOfTravellers}&class=${tClass}`;
 		return await fetch(url).then((response) => response.json());
@@ -386,8 +386,8 @@ const SearchForm = () => {
 	//on submit the form is validated to ensure that the api call is done correctly and to prevent server side errors
 	//then the Parameters are added to the urls and sent to the getFlightData function
 	const handleSubmit = (event) => {
-		var url = "http://localhost:8080/";
-		var urlRe = "http://localhost:8080/";
+		var url = "/";
+		var urlRe = "/";
 		var error = false;
 		if (destTo == null || destFrom == null) {
 			alert("Both destinations must be selected");

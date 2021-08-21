@@ -81,10 +81,10 @@ const PaymentPage = () => {
 		let url = "";
 		if (loggedIn) {
 			userId = passData[0].userId;
-			url = `http://localhost:8080/makeRPayment?price=${total}&userId=${userId}`;
+			url = `/makeRPayment?price=${total}&userId=${userId}`;
 		} else {
 			userId = passData[0].gUserId;
-			url = `http://localhost:8080/makeGPayment?price=${total}&guestUserId=${userId}`;
+			url = `/makeGPayment?price=${total}&guestUserId=${userId}`;
 		}
 		return await fetch(url)
 			.then((res) => res.json())
@@ -105,8 +105,8 @@ const PaymentPage = () => {
 				date.setTime(date.getTime() + 10 * 60 * 60 * 1000);
 				date = date.toISOString();
 				if (loggedIn) {
-					let urlReg = `http://localhost:8080/makeRBooking?fNumber=${flight.flightNumber}&payComp=Yes&payId=${payId}&uId=${item.userId}&aCode=${flight.airlineCode.airlineCode}&fDepTime=${date}&DesCode=${flight.destinationCode.destinationCode}&classCode=${ticket.ticketClass.classCode}&ticketCode=${ticket.ticketType.ticketCode}`;
-					let urlRegGuest = `http://localhost:8080/makeBooking?fNumber=${flight.flightNumber}&payComp=Yes&payId=${payId}&uId=${item.userId}&gUId=${item.gUserId}&aCode=${flight.airlineCode.airlineCode}&fDepTime=${date}&DesCode=${flight.destinationCode.destinationCode}&classCode=${ticket.ticketClass.classCode}&ticketCode=${ticket.ticketType.ticketCode}`;
+					let urlReg = `/makeRBooking?fNumber=${flight.flightNumber}&payComp=Yes&payId=${payId}&uId=${item.userId}&aCode=${flight.airlineCode.airlineCode}&fDepTime=${date}&DesCode=${flight.destinationCode.destinationCode}&classCode=${ticket.ticketClass.classCode}&ticketCode=${ticket.ticketType.ticketCode}`;
+					let urlRegGuest = `/makeBooking?fNumber=${flight.flightNumber}&payComp=Yes&payId=${payId}&uId=${item.userId}&gUId=${item.gUserId}&aCode=${flight.airlineCode.airlineCode}&fDepTime=${date}&DesCode=${flight.destinationCode.destinationCode}&classCode=${ticket.ticketClass.classCode}&ticketCode=${ticket.ticketType.ticketCode}`;
 					if (!item.gUserId) {
 						fetch(urlReg)
 							.then((r) => r.json())
@@ -149,7 +149,7 @@ const PaymentPage = () => {
 							});
 					}
 				} else {
-					let urlGuest = `http://localhost:8080/makeGBooking?fNumber=${flight.flightNumber}&payComp=Yes&payId=${payId}&gUId=${item.gUserId}&aCode=${flight.airlineCode.airlineCode}&fDepTime=${date}&DesCode=${flight.destinationCode.destinationCode}&classCode=${ticket.ticketClass.classCode}&ticketCode=${ticket.ticketType.ticketCode}`;
+					let urlGuest = `/makeGBooking?fNumber=${flight.flightNumber}&payComp=Yes&payId=${payId}&gUId=${item.gUserId}&aCode=${flight.airlineCode.airlineCode}&fDepTime=${date}&DesCode=${flight.destinationCode.destinationCode}&classCode=${ticket.ticketClass.classCode}&ticketCode=${ticket.ticketType.ticketCode}`;
 					fetch(urlGuest)
 						.then((r) => r.json())
 						.then((data) => {
@@ -179,8 +179,8 @@ const PaymentPage = () => {
 					date.setTime(date.getTime() + 10 * 60 * 60 * 1000);
 					date = date.toISOString();
 					if (loggedIn) {
-						let urlReg = `http://localhost:8080/makeRBooking?fNumber=${returnFlight.flightNumber}&payComp=Yes&payId=${payId}&uId=${item.userId}&aCode=${returnFlight.airlineCode.airlineCode}&fDepTime=${date}&DesCode=${returnFlight.destinationCode.destinationCode}&classCode=${reTicket.ticketClass.classCode}&ticketCode=${reTicket.ticketType.ticketCode}`;
-						let urlRegGuest = `http://localhost:8080/makeBooking?fNumber=${returnFlight.flightNumber}&payComp=Yes&payId=${payId}&uId=${item.userId}&gUId=${item.gUserId}&aCode=${returnFlight.airlineCode.airlineCode}&fDepTime=${date}&DesCode=${returnFlight.destinationCode.destinationCode}&classCode=${reTicket.ticketClass.classCode}&ticketCode=${reTicket.ticketType.ticketCode}`;
+						let urlReg = `/makeRBooking?fNumber=${returnFlight.flightNumber}&payComp=Yes&payId=${payId}&uId=${item.userId}&aCode=${returnFlight.airlineCode.airlineCode}&fDepTime=${date}&DesCode=${returnFlight.destinationCode.destinationCode}&classCode=${reTicket.ticketClass.classCode}&ticketCode=${reTicket.ticketType.ticketCode}`;
+						let urlRegGuest = `/makeBooking?fNumber=${returnFlight.flightNumber}&payComp=Yes&payId=${payId}&uId=${item.userId}&gUId=${item.gUserId}&aCode=${returnFlight.airlineCode.airlineCode}&fDepTime=${date}&DesCode=${returnFlight.destinationCode.destinationCode}&classCode=${reTicket.ticketClass.classCode}&ticketCode=${reTicket.ticketType.ticketCode}`;
 						if (!item.gUserId) {
 							fetch(urlReg)
 								.then((r) => r.json())
@@ -223,7 +223,7 @@ const PaymentPage = () => {
 								});
 						}
 					} else {
-						let urlGuest = `http://localhost:8080/makeGBooking?fNumber=${returnFlight.flightNumber}&payComp=Yes&payId=${payId}&gUId=${item.gUserId}&aCode=${returnFlight.airlineCode.airlineCode}&fDepTime=${date}&DesCode=${returnFlight.destinationCode.destinationCode}&classCode=${reTicket.ticketClass.classCode}&ticketCode=${reTicket.ticketType.ticketCode}`;
+						let urlGuest = `/makeGBooking?fNumber=${returnFlight.flightNumber}&payComp=Yes&payId=${payId}&gUId=${item.gUserId}&aCode=${returnFlight.airlineCode.airlineCode}&fDepTime=${date}&DesCode=${returnFlight.destinationCode.destinationCode}&classCode=${reTicket.ticketClass.classCode}&ticketCode=${reTicket.ticketType.ticketCode}`;
 						fetch(urlGuest)
 							.then((r) => r.json())
 							.then((data) => {

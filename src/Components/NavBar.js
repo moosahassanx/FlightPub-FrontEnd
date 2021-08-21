@@ -74,7 +74,7 @@ const NavBar = () => {
         var loginSuccessful = false;
 
         // GET request using fetch with error handling
-        await fetch('http://localhost:8080/login', {
+        await fetch('/login', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

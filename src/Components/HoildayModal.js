@@ -39,7 +39,7 @@ function VerticallyCenteredModal(props) {
       let minus1Day = new Date();
       minus1Day.setDate(dd.getDate() - 1);
       
-      let url = `http://localhost:8080/getflight?1=${ac}&2=${dc}&3=${minus1Day.toJSON()}&4=${in1Day.toJSON()}`
+      let url = `/getflight?1=${ac}&2=${dc}&3=${minus1Day.toJSON()}&4=${in1Day.toJSON()}`
       return await fetch(url)
       .then(response => response.json())
       .then(data =>{
@@ -48,13 +48,13 @@ function VerticallyCenteredModal(props) {
     }
 
     async function bookHolidayPackage(fn, numberOfTravellers, userId, ac, dt){
-      var url = `http://localhost:8080/makeNewBooking?1=${fn}&2=yes&3=${userId}&4=${ac}&5=${dt}&6=${ac}&7=1`;
+      var url = `/makeNewBooking?1=${fn}&2=yes&3=${userId}&4=${ac}&5=${dt}&6=${ac}&7=1`;
       return await fetch(url)
           .then(response => response.json())     
     }
  
     async function getUserId(){
-      let url = `http://localhost:8080/getDetails?userName=${loggerEmail}`
+      let url = `/getDetails?userName=${loggerEmail}`
       return await fetch(url)
       .then(response => response.json())
       .then(data =>{
