@@ -10,7 +10,8 @@ import BookingPage from './BookingPage';
 import TicketSelectionPage from './TicketSelectionPage';
 import PaymentPage from './PaymentPage';
 import ConfirmPage from './ConfirmPage';
-import HolidayPackages from './HolidayPackages';
+import HolidayPackages from './HolidayPackages'
+import WishlistPage from "./WishlistPage";
 
 export {
     Home,
@@ -23,5 +24,6 @@ export {
     TicketSelectionPage,
     PaymentPage,
     ConfirmPage,
-    HolidayPackages
+    HolidayPackages,
+    WishlistPage
 }

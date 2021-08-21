@@ -169,13 +169,18 @@ const NavBar = () => {
             <Nav className="mr-auto">
                 <Nav.Link href="\">Home</Nav.Link>
                 <Nav.Link href="\features">Features</Nav.Link>
-                <Nav.Link href="\Groups">Groups</Nav.Link>                
+                <Nav.Link href="\Groups">Groups</Nav.Link>
                 <Nav.Link href="\discovery">Discovery</Nav.Link>
 
                 {/* only appear when the user has logged in */}
                 {
                     loggedIn == true ? (
                         <Nav.Link href="\accountManagement">Account Management</Nav.Link>
+                    ) : null
+                }
+                {
+                    loggedIn == true ? (
+                        <Nav.Link href="\WishlistPage">Wishlist</Nav.Link>
                     ) : null
                 }
 
@@ -186,7 +191,7 @@ const NavBar = () => {
                     ) : null
                 }
             </Nav>
-            
+
             {
                 loggedIn === false ? (
                     // user has not logged in
@@ -197,7 +202,7 @@ const NavBar = () => {
                             <input className='form-input' type="text" id="username" name="username" placeholder='Username'/><br/>
                             <input className='form-input' type="password" id="password" name="password" placeholder='Password'/>
                         </div>
-                        
+
                         {/* login and register buttons */}
                         <div className='login-wrapper-right'>
                             <submit className='form-button' type="button" onClick={loginChecker}>Log In</submit>
@@ -220,11 +225,11 @@ const NavBar = () => {
                             <submit className='form-button' type='button' onClick={logOut}>Logout</submit>
                         </div>
                     </div>
-                    
+
 
                 )
             }
-            
+
         </Navbar>
 
     )

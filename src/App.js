@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { NavBar, Footer, CardCarousel} from './Components/index';
-import { Home, Features, Register, Business, AccountManagement, Discovery, Groups, BookingPage, TicketSelectionPage, PaymentPage, ConfirmPage, HolidayPackages } from './Pages/index';
+import { Home, Features, Register, Business, AccountManagement, Discovery, Groups, BookingPage, TicketSelectionPage, PaymentPage, ConfirmPage, HolidayPackages, WishlistPage } from './Pages/index';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Css/app.css'
 import 'react-dates/lib/css/_datepicker.css';
@@ -29,6 +29,7 @@ const Routing = () => {
                             <Route exact path="/ConfirmPage" component={ConfirmPage} />
                             <Route exact path="/adminControl" component={AdminControl} />
                             <Route exact path="/applyForPosition" component={ApplyForPosition} />
+                            <Route exact path="/WishlistPage" component={WishlistPage} />
                         </Switch>
                 </Router>
             </div>
