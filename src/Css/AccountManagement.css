@@ -122,9 +122,10 @@
 .account-detail-middle
 {
   width: 100%;
-  float: left;
   text-align: center;
   font-weight: bold;
+  overflow-y:auto;
+  height: 410px;
 }
 
 .button-placement
