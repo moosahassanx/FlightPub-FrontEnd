@@ -22,6 +22,7 @@
     "react-datepicker": "^4.2.0",
     "react-dates": "^21.8.0",
     "react-dom": "^17.0.2",
+    "react-google-places-autocomplete": "^3.3.2",
     "react-icons": "^4.2.0",
     "react-native-elements": "^3.4.2",
     "react-payment": "^0.1.8",
